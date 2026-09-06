@@ -1,0 +1,3 @@
+# Netlify: force the non-www canonical hostname
+http://clock-hub.com/*   https://clock-hub.com/:splat   301!
+https://www.clock-hub.com/*  https://clock-hub.com/:splat  301!

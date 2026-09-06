@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Timer: Free Countdown Timer | ClockHub</title>
+  <meta name="description" content="Free online countdown timer with presets. Set a 5, 10, 20 or 30 minute timer, or a Pomodoro timer, and get an alarm when time is up. No download needed.">
+  <meta name="keywords" content="online timer, countdown timer, free timer, 5 minute timer, 10 minute timer, 20 minute timer, pomodoro timer, kitchen timer online">
+  <link rel="canonical" href="https://clock-hub.com/timer.html">
+  <link rel="alternate" hreflang="en-us" href="https://clock-hub.com/timer.html">
+  <link rel="alternate" hreflang="x-default" href="https://clock-hub.com/timer.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Online Timer: Free Countdown Timer | ClockHub">
+  <meta property="og:description" content="Set a free online countdown timer with an alarm when time is up.">
+  <meta property="og:url" content="https://clock-hub.com/timer.html">
+  <meta property="og:site_name" content="ClockHub">
+  <meta name="twitter:card" content="summary">
+  <meta name="geo.region" content="US">
+  <meta name="geo.placename" content="United States">
+  <meta property="og:locale" content="en_US">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%8F%B3%3C/text%3E%3C/svg%3E">
+  <style>
+/* ==========================================================
+   ClockHub - style.css
+   Dark theme (default) + Light theme via CSS variables
+   ========================================================== */
+
+:root {
+  --bg: #0e1217;
+  --bg-card: #171d26;
+  --bg-elev: #1f2733;
+  --text: #e8edf4;
+  --text-dim: #8b96a5;
+  --accent: #35c9a6;
+  --accent-hover: #2bb593;
+  --accent-text: #06120f;
+  --danger: #ff5d5d;
+  --border: #29323f;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --radius: 14px;
+}
+
+[data-theme="light"] {
+  --bg: #f4f6f9;
+  --bg-card: #ffffff;
+  --bg-elev: #eef1f5;
+  --text: #1c2430;
+  --text-dim: #5d6b7c;
+  --accent: #0e9f80;
+  --accent-hover: #0b8a6f;
+  --accent-text: #ffffff;
+  --danger: #d93b3b;
+  --border: #dde3ea;
+  --shadow: 0 10px 30px rgba(20, 40, 60, 0.10);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.25s, color 0.25s;
+}
+
+/* ---------- Header / Nav ---------- */
+.site-header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.nav-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 58px;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo .logo-mark { color: var(--accent); }
+
+.logo-img {
+  height: 46px;
+  width: auto;
+  display: block;
+  filter: invert(1); /* black logo → white on dark theme */
+}
+
+[data-theme="light"] .logo-img { filter: none; }
+
+.main-nav { display: flex; gap: 4px; align-items: center; }
+
+.main-nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.main-nav a:hover { color: var(--text); background: var(--bg-elev); }
+
+.main-nav a.active {
+  color: var(--accent);
+  background: var(--bg-elev);
+  font-weight: 600;
+}
+
+.header-actions { display: flex; gap: 8px; }
+
+.icon-btn {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.icon-btn:hover { background: var(--border); }
+
+/* ---------- Night/Day mode round icon toggle ---------- */
+.theme-toggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #101317;
+  border: 1px solid #2a323d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.06s, opacity 0.15s;
+}
+
+.theme-toggle:hover { opacity: 0.85; }
+.theme-toggle:active { transform: scale(0.94); }
+.theme-toggle svg { width: 22px; height: 22px; }
+
+[data-theme="light"] .theme-toggle { border-color: #101317; }
+
+/* ---------- Layout ---------- */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 28px 16px 40px;
+}
+
+.tool-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 22px;
+  text-align: center;
+}
+
+/* ---------- Big time display ---------- */
+.time-display {
+  font-family: "Consolas", "Menlo", "DejaVu Sans Mono", monospace;
+  font-size: clamp(3rem, 12vw, 7.5rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.time-display .ampm { font-size: 0.35em; color: var(--text-dim); margin-left: 8px; }
+
+.date-display { color: var(--text-dim); font-size: 1.1rem; margin-top: 6px; }
+
+.status-line {
+  margin-top: 14px;
+  font-size: 1.05rem;
+  color: var(--text-dim);
+  min-height: 1.5em;
+}
+
+.status-line strong { color: var(--accent); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 26px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.06s, background 0.15s, opacity 0.15s;
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn:hover { background: var(--border); }
+.btn:active { transform: scale(0.97); }
+
+.btn-primary { background: var(--accent); color: var(--accent-text); border-color: transparent; }
+.btn-primary:hover { background: var(--accent-hover); }
+
+.btn-danger { background: var(--danger); color: #fff; border-color: transparent; }
+.btn-danger:hover { opacity: 0.9; }
+
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.controls { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+
+/* ---------- Form / selects ---------- */
+.picker-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.picker-row label { color: var(--text-dim); font-size: 0.9rem; }
+
+select, input[type="number"], input[type="text"] {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1.05rem;
+  font-family: inherit;
+}
+
+input[type="number"] { width: 84px; text-align: center; }
+
+select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ---------- Preset grid ---------- */
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.preset-grid button {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 12px 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.preset-grid button:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- Breadcrumbs ---------- */
+.breadcrumb {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+.breadcrumb ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.breadcrumb a { color: var(--text-dim); text-decoration: none; }
+.breadcrumb a:hover { color: var(--accent); text-decoration: underline; }
+.breadcrumb li:not(:last-child)::after { content: "›"; margin-left: 6px; opacity: 0.6; }
+.breadcrumb [aria-current="page"] { color: var(--text); }
+
+/* ---------- Sections / SEO content ---------- */
+.section a { color: var(--accent); text-decoration: none; }
+.section a:hover { text-decoration: underline; }
+
+.section h3 { font-size: 1.05rem; margin: 18px 0 4px; }
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+}
+
+.faq-item:last-child { border-bottom: none; }
+.faq-item h3 { margin: 0 0 6px; font-size: 1.02rem; color: var(--text); }
+.faq-item p { margin: 0; }
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 0.95rem;
+}
+
+.info-table th, .info-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 9px 12px;
+  text-align: left;
+  color: var(--text-dim);
+}
+
+.info-table th { color: var(--text); font-weight: 600; }
+
+.tool-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.tool-links a {
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  transition: border-color 0.15s;
+}
+
+.tool-links a:hover { border-color: var(--accent); text-decoration: none; }
+.tool-links a span { display: block; font-weight: 400; font-size: 0.88rem; color: var(--text-dim); margin-top: 3px; }
+
+.section { margin-top: 34px; text-align: left; }
+
+.section h1 { font-size: 1.6rem; margin-bottom: 10px; }
+.section h2 { font-size: 1.25rem; margin: 22px 0 8px; }
+.section p, .section li { color: var(--text-dim); line-height: 1.7; }
+.section ul, .section ol { padding-left: 22px; margin-top: 6px; }
+
+/* ---------- Recent alarms / laps ---------- */
+.chip-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
+
+.chip {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.chip:hover { border-color: var(--accent); }
+
+.laps-table {
+  width: 100%;
+  max-width: 460px;
+  margin: 20px auto 0;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.laps-table th, .laps-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 9px 12px;
+  font-size: 0.98rem;
+}
+
+.laps-table th { color: var(--text-dim); font-weight: 600; text-align: left; }
+.laps-table td:last-child, .laps-table th:last-child { text-align: right; }
+
+/* ---------- World clock grid ---------- */
+.world-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.world-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: left;
+  position: relative;
+}
+
+.card-remove {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.15rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.card-remove:hover { color: var(--danger); }
+
+/* ---------- Add City modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 13, 17, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 120;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: min(520px, 92vw);
+  text-align: left;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--bg-elev);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-close:hover { color: var(--text); }
+
+.modal-body {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label { color: var(--text-dim); font-size: 0.9rem; margin: 10px 0 4px; }
+
+.modal-body select, .modal-body input[type="text"] { width: 100%; }
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.world-card .city { font-weight: 600; }
+.world-card .tz-time {
+  font-family: "Consolas", monospace;
+  font-size: 1.3rem;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.world-card .tz-date { color: var(--text-dim); font-size: 0.85rem; margin-top: 2px; }
+
+/* ---------- Ringing overlay ---------- */
+.ring-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 13, 17, 0.88);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.ring-overlay.show { display: flex; }
+
+.ring-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px 50px;
+  text-align: center;
+  animation: pulse 1s infinite;
+}
+
+.ring-box h2 { font-size: 2rem; margin-bottom: 8px; }
+.ring-box p { color: var(--text-dim); margin-bottom: 22px; font-size: 1.1rem; }
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 18px 16px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.88rem;
+}
+
+.site-footer a,
+.site-footer span { color: var(--text-dim); text-decoration: none; margin: 0 8px; }
+.site-footer a { text-decoration: none; }
+.site-footer a:hover { color: var(--accent); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .nav-wrap { height: auto; flex-wrap: wrap; padding: 10px 12px; gap: 8px; }
+
+  .logo-img { height: 34px; }
+
+  .main-nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 2px;
+  }
+
+  .main-nav::-webkit-scrollbar { display: none; }
+
+  .main-nav a { padding: 7px 9px; font-size: 0.85rem; white-space: nowrap; }
+
+  .theme-toggle, .icon-btn { width: 38px; height: 38px; }
+
+  .tool-card { padding: 20px 12px; }
+  .controls .btn { padding: 12px 20px; }
+  .picker-row { gap: 8px; }
+
+  .world-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .world-card { padding: 12px 10px; }
+  .world-card .tz-time { font-size: 1.05rem; }
+  .world-card .city { font-size: 0.9rem; }
+
+  .preset-grid { grid-template-columns: repeat(auto-fill, minmax(94px, 1fr)); gap: 8px; }
+  .preset-grid button { padding: 11px 4px; font-size: 0.88rem; }
+
+  .ring-box { padding: 30px 24px; }
+}
+
+  </style>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://clock-hub.com/#website",
+        "url": "https://clock-hub.com/",
+        "name": "ClockHub",
+        "description": "Free online alarm clock, countdown timer, stopwatch and world clock.",
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://clock-hub.com/timer.html#app",
+        "name": "Online Countdown Timer",
+        "url": "https://clock-hub.com/timer.html",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "description": "Free online countdown timer with presets, pause and resume, and an alarm when time is up.",
+        "inLanguage": "en-US",
+        "areaServed": {
+          "@type": "Country",
+          "name": "United States"
+        },
+        "isPartOf": {
+          "@id": "https://clock-hub.com/#website"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://clock-hub.com/timer.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://clock-hub.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Timer",
+            "item": "https://clock-hub.com/timer.html"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://clock-hub.com/timer.html#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does the timer keep running if I switch tabs?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The countdown is based on real clock time rather than on the page being visible, so it stays accurate in a background tab and the alarm fires at the right moment."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I pause the timer and continue later?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Pause freezes the remaining time and Start resumes from exactly that point. Reset returns the timer to the duration you originally entered."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the longest countdown I can set?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Up to 99 hours, which is a little over four days. In practice the browser tab needs to stay open for the whole countdown, so very long timers are best kept to a device that will not sleep."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why did no sound play when the timer finished?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Browsers only allow audio after you have interacted with the page. Starting the timer normally counts as that interaction, but if the sound is silent, check that your device volume is up and the browser tab is not muted."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this timer free to use?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, entirely free with no account, no sign-up and no limits."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="logo" href="index.html"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAACKCAMAAADSQ871AAABklBMVEVHcExfX18AAAAAAAD///9QUFAAAAAAAAAAAAAAAABVVVX7+/upqan8/Pz8/PwDAwM6OjoAAAD////7+/tubm78/Pw9PT0xMTEsLCzs7OxoaGgoKChRUVFOTk6RkZFtbW0JCQkjIyP6+vpjY2Obm5v///+Hh4cWFhYVFRUpKSlKSkqrq6svLy9AQEAlJSVbW1swMDDOzs4kJCR2dnbExMR0dHRJSUkwMDCHh4eDg4NcXFz19fWqqqpbW1tsbGzCwsIkJCRubm40NDQcHBytra1iYmI/Pz9MTEx4eHgJCQlFRUVnZ2cqKio9PT1dXV0nJyclJSVJSUmtra0+Pj6zs7NAQEDLy8tKSkqfn59WVlZWVlZTU1ORkZGXl5dSUlISEhJSUlJsbGxmZmY8PDw+Pj4RERGxsbF1dXUrKys3NzcUFBSlpaUfHx8sLCxFRUXV1dUgICCOjo53d3dmZmZSUlLu7u7CwsJXV1eEhIQLCwsAAAABAQECAgIJCQkGBgYQEBAWFhYbGxshISEMDAw0NDRGRkY0hgmWAAAAenRSTlMABPv+AQIB/QP8AwcDAxZs/foCC6oQ3wb+MaD+33ZDSIn+HtdeSlDT6MUNKvW8MRfqKeRaRjSN1YZtoyeIcG0e8H3i9UVe/qGQcu2NuMbF2adaFKY3sjbUUUqNq284uN/KJ7jSmPVYoEXxxXBVa91Qlpy97flAafCzKiN82qwAACAASURBVHja7JyLX9NYFsdv87q5Sdu1LQWkI27B7YjAAq2KwPDGgV1EZkBB3shTxXHF+Yz72Zt3w/zfe5NWSEKhkQRmnc35fOxH0jTJvd/8zj333JMAEFlkkUUWWWSRRRZZZJFFFlnIxjAcG499sTjLMQwT9cr/DB1WEASeq/UVLwgsy0Vd9McaJ/B85X/pZPLBxtHAwMDIyMjAwPrn1z0LSbGKio+xUVf9UQqq9H2ys3C8+nHuu96t/bxhGLquG0Y5f3+r+GHu4+MndzttVBwrsJH3u2ljY9an2Dqz1n9iaoqMLUtRVUsh+29ZMc2TjrVfSn32b5qEiNMNisgagjIbI4vFfU3BECKEIE1MOjPrz8p2rMjG/cbpAVtSvBB5vhuxdBP5eHFnrqwRsVAUlLGELzYZUYjoStJzHauFpM0pCiWu2ywptJW6x0xM2zqpGFEOOrPTzaffElFBbOrze6Uhi1Pk9q51KCKIllYnDCIhRJ8KiCZ6wpIsq2rlH/GAFJIlDyiUIuyMib272agfr3MsItHCi5YuEzu0IkFEY1XTx97NbT//tPr40/PtjmKzpkkEHfT4QbIvRfadHxwF0dB0TUYQDQ3mVJw663za7vXexZmVPseObVMr4y9/1BUC0ztcSTRFY30cxKLuvCZPlxwuKjQ663cakYBgfrqUseesLM+zAvlk7fltIjk12K8TJ0efiyVS8C8RpGsx0vP3djWcOutzCUGlOL1iR2zu0JqN83aeKFlqN8gA5VUTktZELoodwh+NODC6prsR0eqt2YWLY2pOEADItr6cxN5gD0nLWRDF4aG7OgAKjarL01FS885DQijGXB5ogNZ2zSMmhN89YCJIoUcM2ZY8diDCFDaevyCI6nY1GaAyI72Ykh2QaHrsRRTehWscD5a2VQgdIRqSx0pZMvT4mv0C0NmtOeMHCTW/sjZHFt5wxILWoko5ZCRDde4F8K0FhgfZVR1BByTzDeCjng1VRz90YeT0Vil9OvNVqR2imvUTGjoih5kIUpg64sGTvEMFhBHMH4tf6a3IUT734tOjIHmHiSCFyWjcSNEuRvsjIvfVwz4PHn1/qiUkPYuUFOYUdtxAzshMTuV+AFepW4iBR81fUrIQv8tGC7XhMXpiUE4dSVT5OHO1BdYYWNerUTyN394G6ah7Q5ofHeVdOpIo7VAEV9MAiRJ3ZFSFNPk6miiFYwJ4NOacHpHBRH0p8lftXZZre0tXZElrpWiiFFIuaGjCzQiixj4QDwB9RKs4vJQ+E+XBw5kgJbpVyr1mV24NIgCGF7crDo9SHoOmqIvDENKs6cwzWImC1WBOSgBTk7aUUvLHKAYPJbBrNZAreQ3p/uRXTJAYQahBadBEdgz+IQnCjsEZ9lur62MCFrhx/EI/jdzOTi/4FhIj1BQKK/TNU9CCNL8Q8ooSG+O+NUKx4EJaNd1CQsq26GsWS+5o6wZJHhycF4sAhjXiQyG+/zpESOSOJAdLd97LfDNjid1F2UIhyEwkDl5NuhnR6P6UHyEx9h2dLQw25j+dvwJOyM6R2EFCuYOwYnCuItrO4Zdjv/8NJL4JDVlX3FZY3S0HGpoFsVtG7jVvddNP1Ey0k14q7c0bJoYNNW4TMveaRLSE9KchQbLEmmydmbuvyfBWEEgsy7vNfX3eb3k+yHgyWhqcKCsY/jUAJAGs6G4hyTB34Ctq6BvZfGuQUYdKKbUgEdCrCiVR6i/hhHcMyLSu7uYUq1oT3foGlMSARNvTxYmyVYGQkgNAYrjkB0x7hPRcrDuIcCDbMGbKlepWpNaEBPjMnEqO3R5KXogFhf59BduVzVIQJTFgpqGlwWEtg8dp53mm3F83tBxOXakFAph9q6iYgqSLqCCQYmBcR57a03yhvrdjQNuvmkxVkt0XQWLB7cbU/v52KIFDDKznzGr1RSBILOjQTEk9NVnT2xPOrj3Km6p89rVq5tavlDQRwKamVotGg0BiuaFGGrqFhDtEP4sLTOZgTaPxZZAInIWenp4HIXmPRN94UaIDQwJMU+vjnPUEiGUUHJs9iLvz9D2lZ1qq+kRCynxW6rlqolmc2tmv9G4QSDwoGZS7ohEpviuDmR3Vvk8uhBR6/ntjzM7bBoNEcCeO8pUEME1vbdTYI7mpVBQAlc1gwf5hJYcZBBKXeOYRkkx39fnrWy4GNsp1IAHOstCmHE3gJzsSDQiJE5rAmooqt+QhaIpz51q2sGWXAND05BIIMHeOcUuT9t0QAJIAXpU9pcFQ7s74vCiB6fsRypdDCtdi3KBCBYdEDsSUVGgnKbVS+rzfYJjksg0J4sZEoJYx6Xn7QIEgDZqUuzCYMn17uzi4/fsNQwIt4UDiwX+qkIy7NZrLgGR7FdJ3mSCZRzJtaAwIiQWjRY+3I/re4IT/A0h/V3xCEoNBEoNC4rmS5vV2uFH0GzFHkG4CEgumVeR5DELe8+2EI0g3AIkDSUcZY3W1TxvxnWmLIN0ApBgoeNJ2mMb7/ot7Ikg3AIlnHnu9nYxPRkOGxMVjAs8LQtxXW629BV6Ixf+skBi7N/y/gokD3V5IUOrI+J58+oDEOVeNWbbOyzeca8xsracKa0PinMZeLyTXuWpuvQySo4G8vwIAEoD30p7HJyllz38usS4kzrp3Er8V3hNbeZi1hXIJoureb96//7m0VJnG/bmUVFnF/pm0795QrebVvNBHnvoTcizt0L/rrAeJbMqU1vony/neibFyeWt5xnqok71wYg1Gyd7GyUleUY3J+elCBnh1UQsSl2j4/sy2xn22/SqQ4mBpd+v0VP2fq4WJnLh4tnXetcTpgtQEMoXFYllTFC3f+3Kgzc8zRQI4VpD3aXFzODRIPMgMdxgyzk23LmR7RnZVrDWvTV2UdOVBdmZCx9ry8NH6YJm0SzXmSmlPGfkFkDT7lUcS+TDm130NqVeDlAZLn4pm5f1KEtZ/qP6SSxw2Gl+2anecx3NC4sDSctk0NMlatMSy8aEA6j+Yz4M99Rwk7Y3/te7LIcXBw2UTU1SxYCfDQPKTlkJq10y21glYDhT6NZwqH9s556Mua5UAG4Nt7uPWdHdxcXyfghCmcPn5q8z1urt0JvOkbJ2MnO4UEgBidmAMInvrxZBIq/TNgUd3Z3dNCGnSvOYndbXEcJluCXpfNkOuORxIMXC3C6cgyhesLDPDxEByU4YU1NvbzpcvM4CZMcgNprSIZO8YD0Y0KEkImb8OuQ580Zj0TIY0pe2+EoHPq7964ADAjlz5pQMSucg7lSWJSyAN3Xr70HqWAYjDZdpaXYbGTFqoN6a1/RN737EFc1P+K8Avg8SClUmMJCRPp5uYagd3dtE0Tcnbbd6dmVjm0KAgTU9k7bMzvLhrNU1KqYuiUBdSjPmopnBuNkmCSe66A4cm8FS3VuDckGLsv/LwMkhI+sdP//4NNAkkxOVByV4Np6l8vTovBiwU/0vdtX81kWTh6q5+VYdkTCIEDOoBmYgmrBjesBBeDor4BAYQRIRBx8OOOrq651R30kna+b+3qquT9CN0EgI6k188kqRTVV/dZ333lh+k7tFzAUkFoxmIaOFLuvoOWWGTJwufP/Se/KpgqhyFGOVn7QkqYMEylxpv7DhtZF2QBDGSRfrwCUXr4r07DgyU/SBJ4M6gtZingYThYteG/Y6QANMFKncyfBIRxeAoyX6uC6RWXNvTQRKUzkc6Tw+nDkLVdtSilKY/qEWNKbdzIkob8whiXc6k7QR8B3g5b1VLIdl1ulUXJA68KOQPNkArxKu2QOo7A0ga3zdSLVxQxV8zVO403rwa7KdxYPvY2wsIwsyX5uvyTgdJBfcNnhbdmi5BEN7TAUO8GHG6NSSa2qQ1HUjfr7CUiL18ZB3BQjyccyTl64GUAKnj0nS8NarIdwdJ1h45yibV8K41DwizzwPDMA7slT30BvK4my0k4U4FSZRyi7SMHcrdaYclF2MvrCNGPv/Qad9VcL1IexKhfG1bcZT6bIE0eCcQJOKQvEkeT4ZbrKX67iAhzZm748BUCTHvYzLQ1eHAbLEeSFL7IClgkgoSkY1bTk65NTSqivFExPEzJBakUkM8y1R1qUXw0sr9QjjopOr4QBIkMNI9nGq5i6gTJCXhY6wmlPMGicZJNZBiUv+w9XG+MBSoAjhGqL8AkCQpfmAd+KL8oVPbieC1NRMoH1+vfV4AuW5sQffKwcmUwjcKUYSi+mZIPN0mcVJo0lj90ILH4AOpfK3uB+LnD5JrKcJrmlUYBLOBtJ8Ece09/IZzsklk2TNWAC67GcYimGFOPyqMC2Jt1gt2IdNiyPnZu0eGrhW3XHPwgNQBQpf71mbOcAZQAQnLxsefHtR7LVojvSiQFHDZAgnC4r+Chp8Af3hJKOfk3anCiCGz/MUzVyJL7LyFGR4TNYFVwuvUESR//BxymYX4vQcPpuIuyXaDpIKZ9dJu51nYpVWQsFZO1n2x7M/FgfQ7S8nJ5lzrIGU+tB8nJcC4GWW6ZMD1NEqbY07NfE/lC8RGv7dN60dBdKdnHf/4QZLIz3/WSwNnqsitqju5tHCt3utD74VKkgp2WHKbN64Eg+RXd+eTcVDimxrzXZJfXU9TwLpVP63BvqqPQKZ3k02j8MA9XHqFiYeX6JIk8LILR+G7nBRrAyRUGqv7gdDF2iQVXEs2w2xNUMfBB1I51XbuTgD9vSyAg0m3XHJgxVpjDGsN1shwl6ymoDSwa/TTVZDgLz+HT+aJ7kTaPjhDWxynd9eRUL0vjotcNEjL31i0jp/GxNZccIyKO+cAUm6CcXTxK98aMw2LjMnKkMmkk9akeaMVkEo3HictTxGac4LSFkjfJU46DSQZ/68zIJzlwJwfJNl81vZ5kgCeP6mAFK4PEl/8swaSXTLQiiRhXJg3WNc3iL6doXrobwMSxKtBIHWAE1/GgdixP9sGiQy4CpL3zO6tDVLtAJgD92yQvDYpUJIu/bxgt1xB+Kh1JvDfAKTuZkAioeWxl+JAtvP0OYDUWJLqgaS1ABJxHIQbNmcQ5V+ElX8cSKk+a49B/N8gkOplwcl2/tg2EYXYpCcNbFI9dSfjrbDUAkgSPZ5ihM7kQKttkH40SCROMhAjOvYGgUScsGEfSDLuijTdEf907+69DdKguxkKB1jlitP0kUl32yBlQ62ABMCeXf8my4utXlvy40F6Zrde0gJdcDKQXh9IECfvtEuOJA8+YC446v56igt+7HfBSVzZMEZzgdQR+pS3UdL3O1u7bOHHg/RJYyAVfgtU8mLsqY58IJljbTNYFeEji1lR3xtPxsF+w3EALIHbLJglhuq+ILYAUhhEjiy6AdaipUmB+2eB9NSO943gbs8qmbEXJPKlhbYJ+xxt+sWirhEXSGLczv3ibFUPkvVgRXUY6UONbkzw5u7ezLPLMSCfSbfU0eMHg0QsAkvgeo9F64A0V5C9d+kgfb3t0hcRjB1D5nf9x7l0MdCzamfEhpwJ1t9Yrz0NLo01YAl7JIkDC3bSRNYfRVo5U/rBIMXAxjwDCSZfBu4uFbzuQ5rfc2i7iKy6T1DhheAC77VFfdF4c1ZQHUeBJrI3yIp/wbjTs+BAUOP7ebtBpXGlFQ/vQkFSGoKUAAtFpmvgUSQwqyVKd/3uHWzCfDc+mRV2ZWRZxU23hF23IjOdmiTVAWkG6pVS0GCl5T30E8Gvw6yeVI/WcrYXClIHeJOkd6YQw+AASQAbrMo8mv+pCZCUEDuewci80iA4lMCmj8JqZWfaLWwmoVpRtg5bn+QcXhcnsEQUMT7O41YxtFtpfQx73Zw8QQwNBHIcOJCy0yYQT8yA70DpEqU7rHsAclaAd4CBsiXSCK/H1EYgicAWD6Lh0w2cJUW46gcJ6ZuhdmtmJTG0Bi3aQnnMJRr77MzPncWl3bzsjuQoPx1WamvGKeDepVnHIvqJKFzsik0C4I3DEHfxIEkgzkJ1Wriq1J43zZYSwuGIQ0XXB4mTRlj1nlx43NhXGvCVVRCA53NN7sggStd1axSU7qjUBjzzju4fhF2CRDfWut2mlyj6KwJQVJryixGIwOTgxIyDPugHKQb6txhZWueLU01nS9oofZFCQ5C5qF3VuwM6pJ6MfQmbXPjUWUeSXGwhBayxaJ9PjjYq9ZdA5yL2+3dms1WzAQxWUdjXadtI7VbNV1TBFEUO8t88LQ9tciRrGW9uLlffSO8aJdf5Fif4eHci2Ohm9EEoz482i1IbfRw4cNVkUaBxj97xLooiB2KPTbMSxBSHTu7Wzp0rIOFNB1+NXUCgEW+ncXhXp/qcCCZcE5pzwlVQ7Ygy7fmKKvWvksFpcmm7Ys4FMX5AYk8oGwthX9mRRTO2L9VKrux8icdCo3P78wViV7k6KQtN/val8lwu9sJWeKiwFW8yElfFPcstJCu9I9YFydERRfJs7VxWYy1tshWmUf9lc51xtjVNjuLkTmXUNkga4uWlykE/B2a6ZMZ0H2oiB6eCkaLvQkuyIZtq7kk7/VR6C+lPQcJdExsTRt8RRYz0g5gdvyTAdh/SEW/+4VtIgYs9tI+H6C2PutH96ubNbiNPvEPnbSQilwgP2b2FyimQYI/pUNJ2SKuRzRIPvnrQVgFcwt6e5CvEvfJU6Ark7XRWZnHMYBok3E9UwKxhbSmo990f6+/vT5+8L964+wpDTaatgYvZodeSS5IQzOdl1JUDisIRe9VJ/TUCZmHteRN7SgSRRc2n76LmeJPdPclMWVoGLb3xP3t5VY/KcnESKB2SRLZrZILeJ1y+WoclJ4ixt2Vsew+QXRINo1FzyCsZX23VhvIrtT9uD9r2QJON3Znm9F1q0O6chzJf601u3Y7d5MJ6xGsl1NhhEVH9DLG51NW7lS2a6zO3ByGPcKGY2Z9LC1WHlIIEo3p5+u2lAr61YU18lCgUiKK4fNjZXFVibNyXGaJinJOaaB2ZTq0YlaZwMDt7zdNZWgU9+yUsR7/9m/0/MlSI4vziXt0rHCkTddikbSF1jbx0ORqVcfly3J1cX569VGlTFzV3U3cFAQhCbm9Vt/9IyZSrC8sN+pBLYGNnfKnyHR5l3qZGndR08Hz52Vqer/a729pZdhO2BSlyP6mTzYT4KN2k5vCkQIPZfOnJykhPDDjuM7IkyTjYBqDnMGOUD+/t/L6b0ayb4Y+mOpvTzSpRWNCr77DcRP6ODPRz2XlLjPnLiedLKghNPSrnsbGeun174+FNXTeyV3On0EYISulx2i+ULQ3UCqWjvZBzFh1g8lIeVwarYb38lAi8CsbLztwjGchf28GKQAT/Z+3a/9JWlvjYm0RKTEqTE4lG8UOOHysKLaiA+ECUFry8BBVUfNXHaZVaW2tbPVarYPy/72xA5XUL2vJTsmx2s/vdeWR2Z6Y9f14RF6FwXBE5csJ0fXZWNivXNxOVQ8MRLG7bry4vzs+vr4LxadQT6FdD7Z19qr7yy0ZIQDKNSrrHR8YfDxasl2dIbleBtI9vOhogg0y+ht+1/memYXx9CsTUs8rfYvUCxia4d51xu1xQZEXRvKt+/heeeKj7uCbTc9rV5fVlQbaFidseVdGau6rDPVz1DLx8Vv3bakRJB9VPpCoo6XVNi+tVljJcUoK4PPnx2bOPa8RPHpnD/CA52mmoCqSP0zS6SBYYSVUOVOkZ/7IoPMCb6tajofqkQxPh1NoarwPdQCdmLHv468lIAL/0IdITqUuWlb29lZ5F4vvaKNLBo2MFPvRBqlaIovy/K7wdFF0vhAYHJW8CijaUccGHHF8ntoEf9aRSE6kLjM0Ez24z3xc30LtQuyjLqGBoq4Ni0eOhssOaKN7lvdSVrUyNF0WDuOBlk3+PF9PW0kK0Nfp2Jv+vtl/Wc+mZ+1CVTUU2Ie4oNWeGiHmG+jNJjxgyZjKvjcPWcLovS5se4+YXvq8c+4AtCa6ezbWt7dH564zwhzN2NTcamnWc1ZLS06D7N1JclfPkwVdSU277DDe7wUHDmDtGWHvbdIgqRtit/SgzQiZRFfOfUFJTaVlQD2DridMHHbAoq22EyUQzEW9bwGKtJaXWH3H2D8S3pWHRubmzdNDEezBcYp9rhvJHNXezq5nhbLXHPNpgJNT9uORoDCwvtXezfy49Sgt4QplmqIFm/6o56oCfhRfdwm+TEtXCO1DZ/Zls4iwfguSk2BV3A1n4MJCE+iCZKkBihIk1oKSVhslpaBg0LW3L1d8nFDv6izAs1dysonbzIIG6X6vg/Xiu9P12Lj4i8J63Pr9YqAcSVZL9lKGNXBCQYP7GAYbi/a0AZ8r1FNpQAon8pee8wSIjRRvxT5Il5E4f1BuniiBR5EldyOkXJZDuG6bZnROWGQx5wEzaMaAadt89RSwMxiKHaoFp+zjE7rMbMwajwSgw419jghn0bmhSSB7EN2Hu9vPJlV5oNAi0irUNpdo6SLTZ0Jg2S9bpGg1vzvWbkQZpRp1rbT17chGuAxJVpQ3TCBIHlq171kLX15cJSIaGC684skpKYkorB0FiKlSbWBcxFL2q5Gy13bdBr7wyMLR7bz0tft/xJ8k62n3xX04UKghKAInULt2aEaTm7FiUgd2oNYaftf7s4pnfQYkxF23WdY8uMyD6bblVlwCDX7575nZdwCIlSUfTxfuFRVw7U55cLlqy8TDUcjoXdo2t6CDB+mouvT57xA381bOw0dE58f6FY9ESz81K+iwxIEVtsWkRdJnE+my59GsSbOn1Rm7BAgyhpA9ve4tcywApR39gw6ee+qDvy0T6RZSfztnIUTQ+m8t18rhwvkzEogQzhhbfzuzE5ktbQAywY974sDD71rqZ3gP2jS23sSjA1Jd3OLIjEXq3XQxMHQ0AzG+vgTSZs/k+bAOp7cDawzFbVAXw3HxPzkXFxsZw4stay/DOnpx/flRW7XtmN61vBzyps49P0bzDGkvKztdgkU1aUva2EXbH38TBLYe0pH1mHlwzSjJujeso0TAqm5L7ofwzHaTX+0qy3VT4WxwIWu3H37xa6POm025zaLNk5il6fMd6ErlKqAQksVOOpE3aB6B6NeXYXvATxUG1n4wzJR7mPw4qx286bsLgV0LeZL5dTu+bMuDyKsmYtX0K/LIptE2sWajbrV4o46UdB4qWHEPZWKh3+jivHKfY1YLts2ZfhkFZ05YO8w7eonUDuLU+BqJWi7QkH8ZMN0E2elzA2uJq4eYk356BrHLjTZo8TUhZI2p4T+ugdLFL0Y/WHsywphRP4teJoUdTUeUNwEhgSVwvDGWgzzoMBKRIGtzWQAaWrX72rb0D4J0yxtFkGdkPO0BNXH4kILE2fISPnv3NDgSdLp73Bt/Bct4hsI4IjwylBcKFNZ5PIWQIUk8+y0NHl10VhyLfeD5pGhzRjnbsd/6gIPLxY6yBMzV86eAhfbkGI/J7KqFkAD4pGzCcT6vzjE5IyUKnvMDCOltUI+QwcKmX8O1rkmd9cjcF32Yi6lSgf50Vu2U/F/fy3NhPD47KBt15nwh9/wTmoYPUHlayKu9WEpC9CIsQlsebcCc3CqO1G0tkm3T30TlBzODuL+YXLjudX2bSiuywyA9nlflFJQrMoClaBMmBlJQFesoU7VAip9vbp/KQRGJK7gX7sElXnoC0NShH8YbdRJDy7wEkJ6obn0IpgDGTSoxk/JCDTH7PvxSCtIsN4Mv889JytYKlbGpqRNOGtnBl3qXYtHUB04GKwxt5GLjTgMiooV3RdEO6NwWx1FISPlG5FyaVUf/NOs4KOU19tdONIkX9ilJmqZ10sya7VdlDQv1547Ai90jtXTOqW/YJNpt+EMIqFWunnWQDxLKHlIRK5WSomYhOOAue1tqvJeR4afVROh426B4qbVW1Pj2oBYlFmjGbBV/+1brmp2BRy96BpE0z4EKQ5MBhJBJZGhsggW0ONrdazAY1SNjd1pY8ypjN3AtCSQeUUXImBPhkOqCosX0dpPHQLjZOxDSClJgT8cmt4L9rBbfBTF5kRCvkyjZBKM7WxYEOkqmXgtPAPIMNiFq/3v0Glo7om7c0xOJgZretym7pjIY4eRiUfTD+NUlRhzucwWxcLrxUtSjpPPYVxP2wLzDu9HvmWDGSJMN9b51nVFK7y8u1mIko8ZgyFDOJ3LWlsVMpRbOJ8ydndWipaxDMD/ZJpQ3wof/WkNH6ZK+W3QkL/cjMqKV9ya35AEG6pyRtFMClRaW5HV7gpKPvZM3DeiGLj/mLlMTbHchw3l3pIAEtzSSAgISUREBCtmSbQ5nsCr8h7G4SyQMno7A1pYzhxdrCwIh2GmnHlezqGSTyDj95uwSd3SFIQEBClMOC16sKgjjxnYCkiwwDxHJki/G66AnMwMBLpCKnt0gb2SA5m7GhuaaUHew80x8G6L45ccDCErYMu5tIcuJMUCqrLY1lUbvDaZjEHpqaVqqj67wOLT0/e1iMspLKgHL+7ohLa51olOS70JlKORAQiw6SqQokvB+WbanUnKmXBNelYSH/357OwLUuk2A2n+75aL9CxSFPQHISkEIHJXZHjv2ZvKmUM2QhIKk7hY+p1YIHWM/V55WsdiKNhCbXgwkesqFe8qoI0olwS0kIkpWAtAp9MrZhw5J7kEaVdF9Wbg/EVF1F35LTr7ZmlgglAfO/9q71KXEril8gNzwSHCUDxAfuQBkdgtuKxmXFwQeKa5dV1vqA3a4rVqVltz66M512Et7mD+89CcjDqNgW15nN7wuTkPsgh3Pued17lgq8b3uH30DhqXpuNj69HiH3Jmvj9FxtJkJTB3xiO7lZJ3+AgPr0Onn6+eCKZszG19e4n0O794s8B1oYu+kPl2Q4ZHMAPUQXJ6IuMFJt1bu36m+WPgj5lZl5sgonCJHCnjiKhZA7s4OO4DrgWaGY2QQ/GMqqcolwxyuiNfk+/Y7mE0eISynKaGxzixEmfyNE2hxB6M9zsialjjVdkPmQVhSiR7ve/kgUD3fVRQAABI5JREFU4I9+hf+Vw9j5glfqJwEkksEWl7fd6ah68hHtfJtzoQWPDyU9WYT+iAookHmPmGdRXomSG8mE2JgDs6Eo/pOFd5rTgXLFpxLTr9dQYOwS2Vzh5/XBZaL2h/kvx6N8Og+HZe69dtPc+R54wrNpXsn8nSZEykAxUzE0qiwTXcLniZARPLtcZrSXYvMsoVJZh5cs1lIUYqQ9umJAfGc9pZayKFvrekeGEitj9wJWT4dAWmDBi7wCosgHbl4T8SBeOBtrB3mZYj6CyG2TQO6ww+SCNKAFEKTwsBOamYQmy3N5EXLaoT/kilwEwNKi0XB+Vx3Ri52CsKQ0drK5SEfIpXZN/sssuYB5IIoRL+BAFvVuYw7DQeggLDTzhoL5ACEWPI2RMwzDoLDykhkXYc3DdPYDodRslgb91C2KbieZn9o3+fViHp72ChD+IyMs7faU7WhCC9+VdTRx2SzV9w40X3EvJBqI1SRzsb2QY1aPkTVTkrrPb8C2B15wKzJ6t9rpaGsKrif13GC1C9u1rpv8K3CnDWlrSO6OgCwsp7hjgg7UNoyDJUTaaJ930wfhQCzbwRKoexXpTVhhxJ1UdKhEln7JHztA9xwLr9XYXlqcLlutPR0ZirUQE93lfWm77vhdmMWt7/GNwHBnNzTbVgMON2NZjVa06p9Zy1PUbeFa7cLFds9N6+DaxMes2jPdGgYDkahmATp1lWjEQGh4lm49zXb+eqr3DUfOjVHppsEEzFRe3ZngtCi+HqGwVjVeHJmpSF21hc3KxRMt3NuHOvegEb38f4of3+FXnyjoiTw1Z7HqSU0MaBSxmUymZnEGh8mmChJmafYVX2pmz123s0uFBRo/QRJhti/dMt//1A/qd2pmwx9rFh1mgpxFqVSP7izOEfuh6+/odEbmVnIz1aLF3NHUQixkfy7Y50k/MVD9H8KEuPmCZLXrkEkGOpXL9ek3X+LvJsQfBIFhBMF7kPT98mmqVpIke0cr2UKs43ouyCDXt0Sjf3Me1YNBhMD+Vr1o1uMmSct2LhZLVb9yODmZhhIaq7WimrVv72ghW+1S+TQXdKP+SuhvFETkMcHNij43aQxlN9vN2qYD1c2tppx20dIiXU3F5iiEWOON9gVE9eeSoapk14kyNckgF60NdOcpAxGlUu3cF0b3Jzga+E8yDyU365I0ZJWlB0C2AA/J1eiLce6hqU4GHi7zaMQFt5ZB6t3OT90OJNgQcnVaOHkGLjSDRI8A8Ijsp45rV5LFbLZb5Ls5yG6GSEdl9fz9M0itsLGGnHscbgKHhns85fFXShC7IyxlscgdKpxM7qhfSMVSZTWxk5wDaxc7aOPtPaLOD85oRlyJhfjKleo0HTK3Y0h1/FyVaoU3I/F9lXm0veMGHpedVDOHCQc3Lsc8h6f+aqVULheJrVSGAoK1Q0/mMjV7FAHvHI1N2JByX0vXM2n2qHtAGP+86Ds7U3dWnZ2dxT+vCQPasQW0zWRYRF8ZNKTy3uKqsjlsGBur0FMRfRTNsiZvG1ioqWi8GAMGDBgwYMCAAQMGDBgw0F/8A38WWPXG4QTTAAAAAElFTkSuQmCC" alt="Clock Hub online alarm clock, timer &amp; stopwatch" class="logo-img"></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="index.html">Alarm Clock</a>
+        <a href="timer.html" class="active">Timer</a>
+        <a href="stopwatch.html">Stopwatch</a>
+        <a href="clock.html">World Clock</a>
+      </nav>
+      <div class="header-actions">
+        <button id="themeBtn" class="theme-toggle" aria-label="Toggle night mode"></button>
+        <button id="fsBtn" class="icon-btn" aria-label="Fullscreen" title="Fullscreen">⛶</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="index.html">Home</a></li>
+        <li><span aria-current="page">Timer</span></li>
+      </ol>
+    </nav>
+    <div class="tool-card">
+      <div class="time-display" id="timerDisplay">00:05:00</div>
+      <div class="status-line" id="timerStatus">Set a countdown and press Start</div>
+
+      <div class="picker-row">
+        <label for="tHours">Hours</label>
+        <input type="number" id="tHours" min="0" max="99" value="0">
+        <label for="tMinutes">Minutes</label>
+        <input type="number" id="tMinutes" min="0" max="59" value="5">
+        <label for="tSeconds">Seconds</label>
+        <input type="number" id="tSeconds" min="0" max="59" value="0">
+        <label for="timerSound">Sound</label>
+        <select id="timerSound">
+          <option value="classic">Classic Bell</option>
+          <option value="digital">Digital Beep</option>
+          <option value="gentle">Gentle Chime</option>
+        </select>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-primary" id="startBtn">Start</button>
+        <button class="btn" id="pauseBtn" disabled>Pause</button>
+        <button class="btn" id="resetBtn">Reset</button>
+      </div>
+
+      <div class="preset-grid" id="timerPresets" aria-label="Quick timer presets"></div>
+    </div>
+
+    <section class="section">
+      <h1>Online Countdown Timer</h1>
+      <p>This is a free online countdown timer that runs in your browser with nothing to install.
+      Enter a duration in hours, minutes and seconds, or tap one of the preset buttons, and
+      press <strong>Start</strong>. The timer counts down on screen, and when it reaches zero an
+      alarm sound plays and a full-screen "Time's up" message appears so you cannot miss it.</p>
+
+      <p>Unlike many web timers, this one measures real elapsed time rather than simply counting
+      browser frames. That means it stays accurate to the second even when you switch to another
+      tab, minimize the window or leave the page running in the background while you work. Simpler
+      timers commonly drift by several minutes over a long countdown.</p>
+
+      <h2>How to use the countdown timer</h2>
+      <ol>
+        <li><strong>Set the duration.</strong> Type the hours, minutes and seconds you need, or
+        tap a preset such as 5 min, 25 min or 1 hour to start instantly.</li>
+        <li><strong>Choose an alarm sound</strong> from Classic Bell, Digital Beep or Gentle
+        Chime, depending on how loud an alert the situation calls for.</li>
+        <li><strong>Press Start.</strong> Use <strong>Pause</strong> to stop the clock and resume
+        from the same point, or <strong>Reset</strong> to clear it and return to your set
+        duration.</li>
+      </ol>
+
+      <h2>The Pomodoro technique</h2>
+      <p>The Pomodoro technique is a time management method built around short, protected blocks
+      of focused work. You choose a single task, set a timer for twenty-five minutes, and work on
+      nothing else until it rings. You then take a five-minute break away from the screen. After
+      four of these cycles you take a longer break of fifteen to thirty minutes.</p>
+
+      <p>The method works because a fixed, visible deadline makes it much easier to resist
+      switching tasks, and because the guaranteed break removes the guilt that often comes with
+      stopping. To follow it here, tap the <strong>25 min</strong> preset for a work block and
+      the <strong>5 min</strong> preset for each short break. Students, writers and developers
+      commonly use this pattern to get through long stretches of demanding work without burning
+      out.</p>
+
+      <h2>Cooking and kitchen timings</h2>
+      <p>A countdown timer is at its most useful in the kitchen, where a couple of minutes either
+      way changes the result. The table below lists commonly searched cooking times as a starting
+      point, so adjust for your altitude, pan and personal preference.</p>
+
+      <table class="info-table">
+        <thead><tr><th>What you are cooking</th><th>Typical time</th></tr></thead>
+        <tbody>
+          <tr><td>Soft-boiled egg</td><td>6 minutes</td></tr>
+          <tr><td>Medium-boiled egg</td><td>8 minutes</td></tr>
+          <tr><td>Hard-boiled egg</td><td>10 to 12 minutes</td></tr>
+          <tr><td>Dried pasta</td><td>8 to 12 minutes</td></tr>
+          <tr><td>White rice (absorption)</td><td>15 to 18 minutes</td></tr>
+          <tr><td>Steeping black tea</td><td>3 to 5 minutes</td></tr>
+          <tr><td>Steeping green tea</td><td>2 to 3 minutes</td></tr>
+          <tr><td>French press coffee</td><td>4 minutes</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Workouts and interval training</h2>
+      <p>Interval training alternates bursts of effort with fixed recovery periods, and a timer is
+      what keeps the structure honest. High-intensity interval training typically uses work
+      periods of twenty to sixty seconds against equal or slightly longer rest. Circuit training
+      commonly runs stations of forty-five seconds with fifteen seconds to move between them.
+      Rest between heavy strength sets is usually somewhere between two and five minutes.</p>
+
+      <p>Setting the countdown removes the temptation to cut rest short when you feel impatient
+      or to stretch it out when you are tired, which is exactly the discipline that makes
+      interval work effective.</p>
+
+      <h2>Other everyday uses</h2>
+      <p>Beyond work and exercise, a countdown timer is useful for keeping presentations and
+      meetings to their allotted slot, timing exam practice under realistic conditions, limiting
+      children's screen time or turn-taking during games, timing meditation and breathing
+      exercises, and remembering to check on laundry, a charging device or anything else that
+      needs attention after a fixed interval.</p>
+
+      <h2>Timer, alarm clock or stopwatch: which do you need?</h2>
+      <p>These three tools are easy to confuse, but the distinction is simple. A
+      <strong>countdown timer</strong>, like this page, counts down from a duration you choose and
+      alerts you at zero, so use it for "in twenty minutes". An
+      <a href="index.html">alarm clock</a> alerts you at a specific clock time, use it for "at
+      seven o'clock". A <a href="stopwatch.html">stopwatch</a> counts upwards to measure how long
+      something actually took, rather than alerting you at all. If you need to know the current
+      time somewhere else in the world, the <a href="clock.html">world clock</a> covers that.</p>
+
+      <h2 id="faq">Frequently asked questions</h2>
+
+      <div class="faq-item">
+        <h3>Does the timer keep running if I switch tabs?</h3>
+        <p>Yes. The countdown is based on real clock time rather than on the page being visible,
+        so it stays accurate in a background tab and the alarm fires at the right moment.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Can I pause the timer and continue later?</h3>
+        <p>Yes. <strong>Pause</strong> freezes the remaining time and <strong>Start</strong>
+        resumes from exactly that point. <strong>Reset</strong> returns the timer to the duration
+        you originally entered.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What is the longest countdown I can set?</h3>
+        <p>Up to 99 hours, which is a little over four days. In practice the browser tab needs to
+        stay open for the whole countdown, so very long timers are best kept to a device that
+        will not sleep.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Why did no sound play when the timer finished?</h3>
+        <p>Browsers only allow audio after you have interacted with the page. Starting the timer
+        normally counts as that interaction, but if the sound is silent, check that your device
+        volume is up and the browser tab is not muted.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Is this timer free to use?</h3>
+        <p>Yes, entirely free with no account, no sign-up and no limits.</p>
+      </div>
+
+      <h2>More free time tools</h2>
+      <div class="tool-links">
+        <a href="index.html">Alarm Clock <span>Wake up or get alerted at a specific time</span></a>
+        <a href="stopwatch.html">Stopwatch <span>Measure elapsed time with lap and split times</span></a>
+        <a href="clock.html">World Clock <span>Live local time in cities around the world</span></a>
+      </div>
+    </section>
+  </main>
+
+  <div class="ring-overlay" id="ringOverlay" role="alertdialog" aria-label="Timer finished">
+    <div class="ring-box">
+      <h2>⏳ Time's up!</h2>
+      <p>Your countdown has finished</p>
+      <button class="btn btn-danger" id="ringStopBtn">Stop</button>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>© 2026 ClockHub. Free online alarm clock, timer &amp; stopwatch.</p>
+    <p><a href="index.html">Alarm Clock</a>·<a href="timer.html">Timer</a>·<a href="stopwatch.html">Stopwatch</a>·<a href="clock.html">World Clock</a></p>
+    <p><a href="#faq">FAQ</a><span>About</span><span>Privacy</span></p>
+  </footer>
+
+  <script>
+/* ===== common.js ===== */
+/* ==========================================================
+   ClockHub - common.js
+   Theme toggle, fullscreen, sound engine (Web Audio),
+   helpers shared by all pages.
+   ========================================================== */
+
+"use strict";
+
+/* ---------- Helpers ---------- */
+function pad(n) { return String(n).padStart(2, "0"); }
+
+function format12h(date) {
+  let h = date.getHours();
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12 || 12;
+  return {
+    text: pad(h) + ":" + pad(date.getMinutes()) + ":" + pad(date.getSeconds()),
+    ampm: ampm
+  };
+}
+
+/* ---------- Theme (dark / light) ---------- */
+const TT_MOON =
+  '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+  '<path d="M20.4 14.6A8.6 8.6 0 0 1 9.4 3.6 9 9 0 1 0 20.4 14.6Z"/>' +
+  '<path d="M16.8 4.4l.8 2.1 2.1.8-2.1.8-.8 2.1-.8-2.1-2.1-.8 2.1-.8z"/>' +
+  '</svg>';
+const TT_SUN =
+  '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+  '<circle cx="12" cy="12" r="4.4" fill="currentColor"/>' +
+  '<path d="M12 2.2v2.6M12 19.2v2.6M2.2 12h2.6M19.2 12h2.6M4.8 4.8l1.9 1.9M17.3 17.3l1.9 1.9M19.2 4.8l-1.9 1.9M6.7 17.3l-1.9 1.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>' +
+  '</svg>';
+
+const Theme = {
+  KEY: "clockhub-theme",
+  init() {
+    const saved = localStorage.getItem(this.KEY) || "dark";
+    document.documentElement.setAttribute("data-theme", saved);
+    this.updateBtn();
+  },
+  toggle() {
+    const cur = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", cur);
+    localStorage.setItem(this.KEY, cur);
+    this.updateBtn();
+  },
+  updateBtn() {
+    const btn = document.getElementById("themeBtn");
+    if (btn) {
+      /* light mode → offer NIGHT MODE (moon); dark mode → offer DAY MODE (sun) */
+      btn.innerHTML =
+        document.documentElement.getAttribute("data-theme") === "light" ? TT_MOON : TT_SUN;
+      btn.title = "Toggle night mode";
+    }
+  }
+};
+
+/* ---------- Fullscreen ---------- */
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(function () {});
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+/* ---------- Sound engine (no audio files needed) ---------- */
+const Sound = {
+  ctx: null,
+  timer: null,
+  playing: false,
+
+  ensureCtx() {
+    if (!this.ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AC();
+    }
+    if (this.ctx.state === "suspended") this.ctx.resume();
+  },
+
+  beep(freq, duration, type, when) {
+    const ctx = this.ctx;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || "sine";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, when);
+    gain.gain.exponentialRampToValueAtTime(0.35, when + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, when + duration);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(when);
+    osc.stop(when + duration + 0.05);
+  },
+
+  /* patterns: name -> function that schedules ~1 second of sound */
+  patterns: {
+    classic: function (S) {
+      const t = S.ctx.currentTime;
+      S.beep(880, 0.18, "square", t);
+      S.beep(880, 0.18, "square", t + 0.25);
+      S.beep(880, 0.18, "square", t + 0.5);
+    },
+    digital: function (S) {
+      const t = S.ctx.currentTime;
+      S.beep(1318, 0.1, "square", t);
+      S.beep(1318, 0.1, "square", t + 0.15);
+      S.beep(1760, 0.15, "square", t + 0.3);
+    },
+    gentle: function (S) {
+      const t = S.ctx.currentTime;
+      S.beep(523, 0.4, "sine", t);
+      S.beep(659, 0.4, "sine", t + 0.3);
+      S.beep(784, 0.5, "sine", t + 0.6);
+    }
+  },
+
+  start(name) {
+    this.stop();
+    this.ensureCtx();
+    const patt = this.patterns[name] || this.patterns.classic;
+    const self = this;
+    patt(self);
+    this.timer = setInterval(function () { patt(self); }, 1200);
+    this.playing = true;
+  },
+
+  stop() {
+    if (this.timer) clearInterval(this.timer);
+    this.timer = null;
+    this.playing = false;
+  }
+};
+
+/* ---------- Browser notification ---------- */
+function notify(title, body) {
+  if (!("Notification" in window)) return;
+  if (Notification.permission === "granted") {
+    new Notification(title, { body: body });
+  }
+}
+
+function requestNotifyPermission() {
+  if ("Notification" in window && Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+}
+
+/* ---------- Tab title flash ---------- */
+const TitleFlash = {
+  timer: null,
+  original: document.title,
+  start(msg) {
+    this.stop();
+    this.original = document.title;
+    let on = false;
+    this.timer = setInterval(function () {
+      document.title = on ? msg : "⏰ " + msg;
+      on = !on;
+    }, 800);
+  },
+  stop() {
+    if (this.timer) clearInterval(this.timer);
+    this.timer = null;
+    document.title = this.original;
+  }
+};
+
+/* ---------- Boot ---------- */
+document.addEventListener("DOMContentLoaded", function () {
+  Theme.init();
+  const themeBtn = document.getElementById("themeBtn");
+  if (themeBtn) themeBtn.addEventListener("click", function () { Theme.toggle(); });
+  const fsBtn = document.getElementById("fsBtn");
+  if (fsBtn) fsBtn.addEventListener("click", toggleFullscreen);
+});
+
+/* ===== timer.js ===== */
+/* ==========================================================
+   ClockHub - timer.js
+   Countdown timer. Uses Date.now()-based end time so it
+   stays accurate even when the tab is in the background.
+   ========================================================== */
+
+"use strict";
+
+(function () {
+  const $ = function (id) { return document.getElementById(id); };
+
+  /* Captured at load so the title always matches the real <title> tag */
+  const PAGE_TITLE = document.title;
+
+  let endTime = null;       // ms timestamp when the countdown ends
+  let remainingMs = 0;      // remaining ms when paused
+  let running = false;
+  let interval = null;
+
+  function readInputsMs() {
+    const h = Math.max(0, parseInt($("tHours").value, 10) || 0);
+    const m = Math.max(0, parseInt($("tMinutes").value, 10) || 0);
+    const s = Math.max(0, parseInt($("tSeconds").value, 10) || 0);
+    return ((h * 3600) + (m * 60) + s) * 1000;
+  }
+
+  function render(ms) {
+    if (ms < 0) ms = 0;
+    const total = Math.round(ms / 1000);
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    const text = pad(h) + ":" + pad(m) + ":" + pad(s);
+    $("timerDisplay").textContent = text;
+    if (running) document.title = "\u23F3 " + text + " | " + PAGE_TITLE;
+  }
+
+  function tick() {
+    const left = endTime - Date.now();
+    if (left <= 0) {
+      render(0);
+      finish();
+    } else {
+      render(left);
+    }
+  }
+
+  function start() {
+    if (running) return;
+    const ms = remainingMs > 0 ? remainingMs : readInputsMs();
+    if (ms <= 0) {
+      $("timerStatus").textContent = "Please set a time greater than zero";
+      return;
+    }
+    endTime = Date.now() + ms;
+    remainingMs = 0;
+    running = true;
+    $("timerStatus").textContent = "Counting down…";
+    $("startBtn").disabled = true;
+    $("pauseBtn").disabled = false;
+    Sound.ensureCtx(); // unlock audio on user gesture
+    interval = setInterval(tick, 200);
+    tick();
+  }
+
+  function pause() {
+    if (!running) return;
+    remainingMs = Math.max(0, endTime - Date.now());
+    running = false;
+    clearInterval(interval);
+    $("timerStatus").textContent = "Paused";
+    $("startBtn").disabled = false;
+    $("pauseBtn").disabled = true;
+    document.title = PAGE_TITLE;
+  }
+
+  function reset() {
+    running = false;
+    remainingMs = 0;
+    endTime = null;
+    clearInterval(interval);
+    Sound.stop();
+    TitleFlash.stop();
+    $("ringOverlay").classList.remove("show");
+    render(readInputsMs());
+    $("timerStatus").textContent = "Set a countdown and press Start";
+    $("startBtn").disabled = false;
+    $("pauseBtn").disabled = true;
+    document.title = PAGE_TITLE;
+  }
+
+  function finish() {
+    running = false;
+    clearInterval(interval);
+    $("timerStatus").textContent = "Time's up!";
+    $("startBtn").disabled = false;
+    $("pauseBtn").disabled = true;
+    Sound.start($("timerSound").value);
+    $("ringOverlay").classList.add("show");
+    TitleFlash.start("Time's up!");
+    notify("⏳ ClockHub Timer", "Your countdown has finished.");
+  }
+
+  function stopRing() {
+    Sound.stop();
+    TitleFlash.stop();
+    $("ringOverlay").classList.remove("show");
+    document.title = PAGE_TITLE;
+  }
+
+  /* ---------- Presets ---------- */
+  function buildPresets() {
+    const grid = $("timerPresets");
+    const presets = [
+      ["1 min", 0, 1, 0], ["3 min", 0, 3, 0], ["5 min", 0, 5, 0],
+      ["10 min", 0, 10, 0], ["15 min", 0, 15, 0], ["20 min", 0, 20, 0],
+      ["25 min", 0, 25, 0], ["30 min", 0, 30, 0], ["45 min", 0, 45, 0],
+      ["1 hour", 1, 0, 0], ["1.5 hours", 1, 30, 0], ["2 hours", 2, 0, 0]
+    ];
+    presets.forEach(function (p) {
+      const b = document.createElement("button");
+      b.textContent = p[0];
+      b.addEventListener("click", function () {
+        $("tHours").value = p[1];
+        $("tMinutes").value = p[2];
+        $("tSeconds").value = p[3];
+        remainingMs = 0;
+        running = false;
+        clearInterval(interval);
+        start();
+      });
+      grid.appendChild(b);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    buildPresets();
+    render(readInputsMs());
+    ["tHours", "tMinutes", "tSeconds"].forEach(function (id) {
+      $(id).addEventListener("input", function () {
+        if (!running) { remainingMs = 0; render(readInputsMs()); }
+      });
+    });
+    $("startBtn").addEventListener("click", start);
+    $("pauseBtn").addEventListener("click", pause);
+    $("resetBtn").addEventListener("click", reset);
+    $("ringStopBtn").addEventListener("click", stopRing);
+    requestNotifyPermission();
+  });
+})();
+
+  </script>
+</body>
+</html>

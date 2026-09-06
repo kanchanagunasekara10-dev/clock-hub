@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Current Time &amp; World Clock: EST, CST, MST, PST | ClockHub</title>
+  <meta name="description" content="See the exact current time in your local zone plus a live world clock. Compare Eastern, Central, Mountain and Pacific time and cities worldwide.">
+  <meta name="keywords" content="current time, what time is it, world clock, EST to PST, time zone converter, eastern time now, pacific time now, US time zones">
+  <link rel="canonical" href="https://clock-hub.com/clock.html">
+  <link rel="alternate" hreflang="en-us" href="https://clock-hub.com/clock.html">
+  <link rel="alternate" hreflang="x-default" href="https://clock-hub.com/clock.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Current Time &amp; World Clock: EST, CST, MST, PST | ClockHub">
+  <meta property="og:description" content="Exact current time with a live world clock for US and international cities.">
+  <meta property="og:url" content="https://clock-hub.com/clock.html">
+  <meta property="og:site_name" content="ClockHub">
+  <meta name="twitter:card" content="summary">
+  <meta name="geo.region" content="US">
+  <meta name="geo.placename" content="United States">
+  <meta property="og:locale" content="en_US">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%95%92%3C/text%3E%3C/svg%3E">
+  <style>
+/* ==========================================================
+   ClockHub - style.css
+   Dark theme (default) + Light theme via CSS variables
+   ========================================================== */
+
+:root {
+  --bg: #0e1217;
+  --bg-card: #171d26;
+  --bg-elev: #1f2733;
+  --text: #e8edf4;
+  --text-dim: #8b96a5;
+  --accent: #35c9a6;
+  --accent-hover: #2bb593;
+  --accent-text: #06120f;
+  --danger: #ff5d5d;
+  --border: #29323f;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --radius: 14px;
+}
+
+[data-theme="light"] {
+  --bg: #f4f6f9;
+  --bg-card: #ffffff;
+  --bg-elev: #eef1f5;
+  --text: #1c2430;
+  --text-dim: #5d6b7c;
+  --accent: #0e9f80;
+  --accent-hover: #0b8a6f;
+  --accent-text: #ffffff;
+  --danger: #d93b3b;
+  --border: #dde3ea;
+  --shadow: 0 10px 30px rgba(20, 40, 60, 0.10);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.25s, color 0.25s;
+}
+
+/* ---------- Header / Nav ---------- */
+.site-header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.nav-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 58px;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo .logo-mark { color: var(--accent); }
+
+.logo-img {
+  height: 46px;
+  width: auto;
+  display: block;
+  filter: invert(1); /* black logo → white on dark theme */
+}
+
+[data-theme="light"] .logo-img { filter: none; }
+
+.main-nav { display: flex; gap: 4px; align-items: center; }
+
+.main-nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.main-nav a:hover { color: var(--text); background: var(--bg-elev); }
+
+.main-nav a.active {
+  color: var(--accent);
+  background: var(--bg-elev);
+  font-weight: 600;
+}
+
+.header-actions { display: flex; gap: 8px; }
+
+.icon-btn {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.icon-btn:hover { background: var(--border); }
+
+/* ---------- Night/Day mode round icon toggle ---------- */
+.theme-toggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #101317;
+  border: 1px solid #2a323d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.06s, opacity 0.15s;
+}
+
+.theme-toggle:hover { opacity: 0.85; }
+.theme-toggle:active { transform: scale(0.94); }
+.theme-toggle svg { width: 22px; height: 22px; }
+
+[data-theme="light"] .theme-toggle { border-color: #101317; }
+
+/* ---------- Layout ---------- */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 28px 16px 40px;
+}
+
+.tool-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 22px;
+  text-align: center;
+}
+
+/* ---------- Big time display ---------- */
+.time-display {
+  font-family: "Consolas", "Menlo", "DejaVu Sans Mono", monospace;
+  font-size: clamp(3rem, 12vw, 7.5rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.time-display .ampm { font-size: 0.35em; color: var(--text-dim); margin-left: 8px; }
+
+.date-display { color: var(--text-dim); font-size: 1.1rem; margin-top: 6px; }
+
+.status-line {
+  margin-top: 14px;
+  font-size: 1.05rem;
+  color: var(--text-dim);
+  min-height: 1.5em;
+}
+
+.status-line strong { color: var(--accent); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 26px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.06s, background 0.15s, opacity 0.15s;
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn:hover { background: var(--border); }
+.btn:active { transform: scale(0.97); }
+
+.btn-primary { background: var(--accent); color: var(--accent-text); border-color: transparent; }
+.btn-primary:hover { background: var(--accent-hover); }
+
+.btn-danger { background: var(--danger); color: #fff; border-color: transparent; }
+.btn-danger:hover { opacity: 0.9; }
+
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.controls { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+
+/* ---------- Form / selects ---------- */
+.picker-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.picker-row label { color: var(--text-dim); font-size: 0.9rem; }
+
+select, input[type="number"], input[type="text"] {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1.05rem;
+  font-family: inherit;
+}
+
+input[type="number"] { width: 84px; text-align: center; }
+
+select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ---------- Preset grid ---------- */
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.preset-grid button {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 12px 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.preset-grid button:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- Breadcrumbs ---------- */
+.breadcrumb {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+.breadcrumb ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.breadcrumb a { color: var(--text-dim); text-decoration: none; }
+.breadcrumb a:hover { color: var(--accent); text-decoration: underline; }
+.breadcrumb li:not(:last-child)::after { content: "›"; margin-left: 6px; opacity: 0.6; }
+.breadcrumb [aria-current="page"] { color: var(--text); }
+
+/* ---------- Sections / SEO content ---------- */
+.section a { color: var(--accent); text-decoration: none; }
+.section a:hover { text-decoration: underline; }
+
+.section h3 { font-size: 1.05rem; margin: 18px 0 4px; }
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+}
+
+.faq-item:last-child { border-bottom: none; }
+.faq-item h3 { margin: 0 0 6px; font-size: 1.02rem; color: var(--text); }
+.faq-item p { margin: 0; }
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 0.95rem;
+}
+
+.info-table th, .info-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 9px 12px;
+  text-align: left;
+  color: var(--text-dim);
+}
+
+.info-table th { color: var(--text); font-weight: 600; }
+
+.tool-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.tool-links a {
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  transition: border-color 0.15s;
+}
+
+.tool-links a:hover { border-color: var(--accent); text-decoration: none; }
+.tool-links a span { display: block; font-weight: 400; font-size: 0.88rem; color: var(--text-dim); margin-top: 3px; }
+
+.section { margin-top: 34px; text-align: left; }
+
+.section h1 { font-size: 1.6rem; margin-bottom: 10px; }
+.section h2 { font-size: 1.25rem; margin: 22px 0 8px; }
+.section p, .section li { color: var(--text-dim); line-height: 1.7; }
+.section ul, .section ol { padding-left: 22px; margin-top: 6px; }
+
+/* ---------- Recent alarms / laps ---------- */
+.chip-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
+
+.chip {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.chip:hover { border-color: var(--accent); }
+
+.laps-table {
+  width: 100%;
+  max-width: 460px;
+  margin: 20px auto 0;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.laps-table th, .laps-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 9px 12px;
+  font-size: 0.98rem;
+}
+
+.laps-table th { color: var(--text-dim); font-weight: 600; text-align: left; }
+.laps-table td:last-child, .laps-table th:last-child { text-align: right; }
+
+/* ---------- World clock grid ---------- */
+.world-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.world-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: left;
+  position: relative;
+}
+
+.card-remove {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.15rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.card-remove:hover { color: var(--danger); }
+
+/* ---------- Add City modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 13, 17, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 120;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: min(520px, 92vw);
+  text-align: left;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--bg-elev);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-close:hover { color: var(--text); }
+
+.modal-body {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label { color: var(--text-dim); font-size: 0.9rem; margin: 10px 0 4px; }
+
+.modal-body select, .modal-body input[type="text"] { width: 100%; }
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.world-card .city { font-weight: 600; }
+.world-card .tz-time {
+  font-family: "Consolas", monospace;
+  font-size: 1.3rem;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.world-card .tz-date { color: var(--text-dim); font-size: 0.85rem; margin-top: 2px; }
+
+/* ---------- Ringing overlay ---------- */
+.ring-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 13, 17, 0.88);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.ring-overlay.show { display: flex; }
+
+.ring-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px 50px;
+  text-align: center;
+  animation: pulse 1s infinite;
+}
+
+.ring-box h2 { font-size: 2rem; margin-bottom: 8px; }
+.ring-box p { color: var(--text-dim); margin-bottom: 22px; font-size: 1.1rem; }
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 18px 16px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.88rem;
+}
+
+.site-footer a,
+.site-footer span { color: var(--text-dim); text-decoration: none; margin: 0 8px; }
+.site-footer a { text-decoration: none; }
+.site-footer a:hover { color: var(--accent); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .nav-wrap { height: auto; flex-wrap: wrap; padding: 10px 12px; gap: 8px; }
+
+  .logo-img { height: 34px; }
+
+  .main-nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 2px;
+  }
+
+  .main-nav::-webkit-scrollbar { display: none; }
+
+  .main-nav a { padding: 7px 9px; font-size: 0.85rem; white-space: nowrap; }
+
+  .theme-toggle, .icon-btn { width: 38px; height: 38px; }
+
+  .tool-card { padding: 20px 12px; }
+  .controls .btn { padding: 12px 20px; }
+  .picker-row { gap: 8px; }
+
+  .world-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .world-card { padding: 12px 10px; }
+  .world-card .tz-time { font-size: 1.05rem; }
+  .world-card .city { font-size: 0.9rem; }
+
+  .preset-grid { grid-template-columns: repeat(auto-fill, minmax(94px, 1fr)); gap: 8px; }
+  .preset-grid button { padding: 11px 4px; font-size: 0.88rem; }
+
+  .ring-box { padding: 30px 24px; }
+}
+
+  </style>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://clock-hub.com/#website",
+        "url": "https://clock-hub.com/",
+        "name": "ClockHub",
+        "description": "Free online alarm clock, countdown timer, stopwatch and world clock.",
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://clock-hub.com/clock.html#app",
+        "name": "Current Time and World Clock",
+        "url": "https://clock-hub.com/clock.html",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "description": "Current time in your local zone plus a live world clock covering Eastern, Central, Mountain and Pacific time and cities worldwide.",
+        "inLanguage": "en-US",
+        "areaServed": {
+          "@type": "Country",
+          "name": "United States"
+        },
+        "isPartOf": {
+          "@id": "https://clock-hub.com/#website"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://clock-hub.com/clock.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://clock-hub.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "World Clock",
+            "item": "https://clock-hub.com/clock.html"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://clock-hub.com/clock.html#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the time difference between EST and PST?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Three hours. Pacific time is always three hours behind Eastern time, so 3:00 PM in New York is 12:00 PM in Los Angeles. The gap stays the same year-round because both zones change for daylight saving on the same dates."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Arizona change its clocks?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Most of Arizona does not, so it stays on Mountain Standard Time all year. That puts Phoenix on the same clock as Denver in winter and the same clock as Los Angeles in summer. The Navajo Nation within Arizona is the exception and does observe daylight saving."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is the time on this page accurate?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The clock reads the time from your own device, so it is exactly as accurate as your device's clock. Most computers and phones synchronize automatically with internet time servers and stay accurate to well under a second."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I add a city that is not shown?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Press Add City, select the country, choose the time zone from the list, and edit the title if you want a different label. The new clock appears immediately and is saved for your next visit."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I remove a city I added?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Hover over the card you added and click the \u00d7 in its top-right corner. The ten default cities cannot be removed."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the world clock adjust for daylight saving time?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, automatically. Each city uses its region's official daylight saving rules rather than a fixed offset, so the displayed time is correct year-round."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does another city show a different date?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "That is normal. Time zones far apart can be on opposite sides of midnight, so a city may legitimately be a calendar day ahead of or behind you. The date under each clock makes this clear."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="logo" href="index.html"><img src="data:image/png;base64,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" alt="Clock Hub online alarm clock, timer &amp; stopwatch" class="logo-img"></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="index.html">Alarm Clock</a>
+        <a href="timer.html">Timer</a>
+        <a href="stopwatch.html">Stopwatch</a>
+        <a href="clock.html" class="active">World Clock</a>
+      </nav>
+      <div class="header-actions">
+        <button id="themeBtn" class="theme-toggle" aria-label="Toggle night mode"></button>
+        <button id="fsBtn" class="icon-btn" aria-label="Fullscreen" title="Fullscreen">⛶</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="index.html">Home</a></li>
+        <li><span aria-current="page">World Clock</span></li>
+      </ol>
+    </nav>
+    <div class="tool-card">
+      <div class="time-display" id="bigTime">--:--:--</div>
+      <div class="date-display" id="bigDate"></div>
+      <div class="status-line" id="tzName"></div>
+
+      <div class="world-grid" id="worldGrid"></div>
+      <div class="controls">
+        <button class="btn btn-primary" id="addCityBtn">＋ Add City</button>
+      </div>
+    </div>
+
+    <section class="section">
+      <h1>Current Time &amp; World Clock</h1>
+      <p>The large clock above shows the exact current time in <strong>your own time zone</strong>,
+      detected automatically from your device and updated every second. Below it, the world clock
+      displays the live local time in major cities around the world, so you can compare time zones
+      at a glance for meetings, international calls and travel planning, without doing any
+      arithmetic in your head.</p>
+
+      <p>You can add any city in the world to the grid using the <strong>Add City</strong> button.
+      Choose a country, pick the time zone, give it whatever label you prefer, and it appears
+      alongside the others. Cities you add are remembered in your browser, so your personal set of
+      clocks is still there the next time you visit.</p>
+
+      <h2>Using this page as a desk clock</h2>
+      <p>Press the fullscreen button in the top right and the page becomes a large, readable desk
+      clock, useful on a spare monitor, a tablet propped up on a desk, or a screen in a meeting
+      room or reception area. The night mode toggle switches to a dark display that is far easier
+      on the eyes in a dim room and noticeably kinder if the screen is left on overnight.</p>
+
+      <h2>How time zones work</h2>
+      <p>The world is divided into time zones defined by their offset from Coordinated Universal
+      Time, written as UTC. A zone at UTC+05:30, such as Sri Lanka and India, is five and a half
+      hours ahead of UTC; a zone at UTC−05:00, such as New York in winter, is five hours behind.
+      The difference between any two places is simply the difference between their offsets.</p>
+
+      <p>Most offsets are whole hours, but not all. Sri Lanka, India and Nepal use half-hour or
+      quarter-hour offsets, which is exactly the kind of detail that makes manual conversion
+      error-prone. This page reads each city's offset directly from your device's time zone
+      database, so half-hour zones and unusual offsets are handled correctly without you having to
+      think about them.</p>
+
+      <h2>Daylight saving time</h2>
+      <p>Many countries shift their clocks forward by an hour in spring and back again in the fall,
+      a practice known as daylight saving time. This is the single biggest source of confusion in
+      international scheduling, because the gap between two cities changes on dates that differ
+      from country to country. Some countries, including Sri Lanka, India, Japan and most of
+      Africa, do not observe it at all.</p>
+
+      <p>The clocks on this page adjust for daylight saving automatically, because they use each
+      region's official rules rather than a fixed offset. A city that has just moved its clocks
+      will show the corrected time straight away, so you are never left calculating from an
+      out-of-date assumption.</p>
+
+      <h2>US time zones explained</h2>
+      <p>The mainland United States is divided into four time zones, and Alaska and Hawaii add two
+      more. Each zone has a standard abbreviation used in winter and a daylight abbreviation used in
+      summer, which is why you see both EST and EDT for the same part of the country.</p>
+
+      <table class="info-table">
+        <thead><tr><th>Zone</th><th>Standard (winter)</th><th>Daylight (summer)</th><th>Example cities</th></tr></thead>
+        <tbody>
+          <tr><td>Eastern</td><td>EST, UTC-05:00</td><td>EDT, UTC-04:00</td><td>New York, Miami, Atlanta, Boston</td></tr>
+          <tr><td>Central</td><td>CST, UTC-06:00</td><td>CDT, UTC-05:00</td><td>Chicago, Houston, Dallas, Nashville</td></tr>
+          <tr><td>Mountain</td><td>MST, UTC-07:00</td><td>MDT, UTC-06:00</td><td>Denver, Salt Lake City, Albuquerque</td></tr>
+          <tr><td>Pacific</td><td>PST, UTC-08:00</td><td>PDT, UTC-07:00</td><td>Los Angeles, San Francisco, Seattle</td></tr>
+          <tr><td>Alaska</td><td>AKST, UTC-09:00</td><td>AKDT, UTC-08:00</td><td>Anchorage, Juneau</td></tr>
+          <tr><td>Hawaii</td><td>HST, UTC-10:00</td><td>no daylight saving</td><td>Honolulu, Hilo</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Converting between US time zones</h2>
+      <p>Because the four mainland zones sit exactly one hour apart, conversions between them are
+      simple once you know the direction. Eastern is one hour ahead of Central, two ahead of
+      Mountain and three ahead of Pacific. So 3:00 PM in New York is 2:00 PM in Chicago, 1:00 PM in
+      Denver and 12:00 PM in Los Angeles.</p>
+
+      <p>The most common conversions people look up are listed below, using a 9:00 AM Eastern start
+      time as the reference point.</p>
+
+      <table class="info-table">
+        <thead><tr><th>9:00 AM Eastern equals</th><th>Local time</th></tr></thead>
+        <tbody>
+          <tr><td>Central (Chicago, Dallas)</td><td>8:00 AM</td></tr>
+          <tr><td>Mountain (Denver, Phoenix in summer)</td><td>7:00 AM</td></tr>
+          <tr><td>Pacific (Los Angeles, Seattle)</td><td>6:00 AM</td></tr>
+          <tr><td>Alaska (Anchorage)</td><td>5:00 AM</td></tr>
+          <tr><td>Hawaii (Honolulu)</td><td>3:00 AM</td></tr>
+          <tr><td>UK (London)</td><td>2:00 PM</td></tr>
+          <tr><td>Central Europe (Paris, Berlin)</td><td>3:00 PM</td></tr>
+          <tr><td>India (New Delhi)</td><td>6:30 PM</td></tr>
+        </tbody>
+      </table>
+
+      <p>Add the cities you work with to the world clock above and the current time in each is
+      always on screen, which removes the arithmetic entirely and avoids mistakes when daylight
+      saving shifts one side of the comparison but not the other.</p>
+
+      <h2>When does daylight saving time change in the US?</h2>
+      <p>In the United States, daylight saving time begins on the <strong>second Sunday in
+      March</strong>, when clocks move forward one hour at 2:00 AM local time, and ends on the
+      <strong>first Sunday in November</strong>, when clocks move back one hour at 2:00 AM. The
+      common reminder is "spring forward, fall back": you lose an hour of sleep in March and gain
+      one in November.</p>
+
+      <p>Not every part of the country takes part. <strong>Hawaii</strong> and most of
+      <strong>Arizona</strong> stay on standard time all year, though the Navajo Nation within
+      Arizona does observe the change. Puerto Rico, the US Virgin Islands, Guam and American Samoa
+      also remain on standard time year-round. This is why Phoenix is on the same clock as Denver in
+      summer but the same clock as Los Angeles in winter, a quirk that catches out a lot of people
+      scheduling calls.</p>
+
+      <p>The clocks on this page follow each region's official rules automatically, so they are
+      already correct on the morning after a change without you needing to do anything.</p>
+
+      <h2>Time zone offsets around the world</h2>
+      <p>The table below shows standard offsets for widely used international business time zones.
+      Where a region observes daylight saving, the offset shifts by one hour for part of the year.</p>
+
+      <table class="info-table">
+        <thead><tr><th>City</th><th>Time zone</th><th>Standard offset</th></tr></thead>
+        <tbody>
+          <tr><td>Colombo</td><td>Asia/Colombo</td><td>UTC+05:30</td></tr>
+          <tr><td>New Delhi</td><td>Asia/Kolkata</td><td>UTC+05:30</td></tr>
+          <tr><td>Dubai</td><td>Asia/Dubai</td><td>UTC+04:00</td></tr>
+          <tr><td>London</td><td>Europe/London</td><td>UTC+00:00</td></tr>
+          <tr><td>Paris</td><td>Europe/Paris</td><td>UTC+01:00</td></tr>
+          <tr><td>New York</td><td>America/New_York</td><td>UTC−05:00</td></tr>
+          <tr><td>Los Angeles</td><td>America/Los_Angeles</td><td>UTC−08:00</td></tr>
+          <tr><td>Singapore</td><td>Asia/Singapore</td><td>UTC+08:00</td></tr>
+          <tr><td>Tokyo</td><td>Asia/Tokyo</td><td>UTC+09:00</td></tr>
+          <tr><td>Sydney</td><td>Australia/Sydney</td><td>UTC+10:00</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Scheduling meetings across time zones</h2>
+      <p>When you are arranging a call between countries, a few habits prevent almost all of the
+      usual mistakes. Always state the time zone explicitly rather than saying "3 o'clock" and
+      hoping. Saying "3:00 PM Colombo time (UTC+05:30)" leaves no room for error. Confirm the date as
+      well as the time, since a late-evening meeting in Asia often falls on the previous calendar
+      day in the Americas, something the world clock above makes immediately obvious.</p>
+
+      <p>It also helps to check the gap close to the meeting date rather than weeks ahead, because
+      daylight saving changes can quietly move the difference by an hour in between. Adding the
+      cities you work with to this page is the quickest way to keep that visible.</p>
+
+      <h2 id="faq">Frequently asked questions</h2>
+
+            <div class="faq-item">
+        <h3>What is the time difference between EST and PST?</h3>
+        <p>Three hours. Pacific time is always three hours behind Eastern time, so 3:00 PM in New
+        York is 12:00 PM in Los Angeles. The gap stays the same year-round because both zones
+        change for daylight saving on the same dates.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does Arizona change its clocks?</h3>
+        <p>Most of Arizona does not, so it stays on Mountain Standard Time all year. That puts
+        Phoenix on the same clock as Denver in winter and the same clock as Los Angeles in summer.
+        The Navajo Nation within Arizona is the exception and does observe daylight saving.</p>
+      </div>
+
+<div class="faq-item">
+        <h3>Is the time on this page accurate?</h3>
+        <p>The clock reads the time from your own device, so it is exactly as accurate as your
+        device's clock. Most computers and phones synchronize automatically with internet time
+        servers and stay accurate to well under a second.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How do I add a city that is not shown?</h3>
+        <p>Press <strong>Add City</strong>, select the country, choose the time zone from the
+        list, and edit the title if you want a different label. The new clock appears immediately
+        and is saved for your next visit.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How do I remove a city I added?</h3>
+        <p>Hover over the card you added and click the × in its top-right corner. The ten default
+        cities cannot be removed.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does the world clock adjust for daylight saving time?</h3>
+        <p>Yes, automatically. Each city uses its region's official daylight saving rules rather
+        than a fixed offset, so the displayed time is correct year-round.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Why does another city show a different date?</h3>
+        <p>That is normal. Time zones far apart can be on opposite sides of midnight, so a city
+        may legitimately be a calendar day ahead of or behind you. The date under each clock makes
+        this clear.</p>
+      </div>
+
+      <h2>More free time tools</h2>
+      <div class="tool-links">
+        <a href="index.html">Alarm Clock <span>Wake up or get alerted at a specific time</span></a>
+        <a href="timer.html">Countdown Timer <span>Count down from any duration with an alarm at zero</span></a>
+        <a href="stopwatch.html">Stopwatch <span>Measure elapsed time with lap and split times</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 ClockHub. Free online alarm clock, timer &amp; stopwatch.</p>
+    <p><a href="index.html">Alarm Clock</a>·<a href="timer.html">Timer</a>·<a href="stopwatch.html">Stopwatch</a>·<a href="clock.html">World Clock</a></p>
+    <p><a href="#faq">FAQ</a><span>About</span><span>Privacy</span></p>
+  </footer>
+
+  <div class="modal-overlay" id="cityModal" role="dialog" aria-label="Add city">
+    <div class="modal">
+      <div class="modal-header"><span>Add</span><button class="modal-close" id="cityModalClose" aria-label="Close">×</button></div>
+      <div class="modal-body">
+        <label class="field-label" for="countrySel">Country</label>
+        <select id="countrySel"></select>
+        <label class="field-label" for="tzSel">Time zone</label>
+        <select id="tzSel"></select>
+        <label class="field-label" for="cityTitle">Title</label>
+        <input type="text" id="cityTitle" maxlength="40">
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="cityCancel">Cancel</button>
+        <button class="btn btn-primary" id="cityOk">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+/* ===== common.js ===== */
+/* ==========================================================
+   ClockHub - common.js
+   Theme toggle, fullscreen, sound engine (Web Audio),
+   helpers shared by all pages.
+   ========================================================== */
+
+"use strict";
+
+/* ---------- Helpers ---------- */
+function pad(n) { return String(n).padStart(2, "0"); }
+
+function format12h(date) {
+  let h = date.getHours();
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12 || 12;
+  return {
+    text: pad(h) + ":" + pad(date.getMinutes()) + ":" + pad(date.getSeconds()),
+    ampm: ampm
+  };
+}
+
+/* ---------- Theme (dark / light) ---------- */
+const TT_MOON =
+  '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+  '<path d="M20.4 14.6A8.6 8.6 0 0 1 9.4 3.6 9 9 0 1 0 20.4 14.6Z"/>' +
+  '<path d="M16.8 4.4l.8 2.1 2.1.8-2.1.8-.8 2.1-.8-2.1-2.1-.8 2.1-.8z"/>' +
+  '</svg>';
+const TT_SUN =
+  '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+  '<circle cx="12" cy="12" r="4.4" fill="currentColor"/>' +
+  '<path d="M12 2.2v2.6M12 19.2v2.6M2.2 12h2.6M19.2 12h2.6M4.8 4.8l1.9 1.9M17.3 17.3l1.9 1.9M19.2 4.8l-1.9 1.9M6.7 17.3l-1.9 1.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>' +
+  '</svg>';
+
+const Theme = {
+  KEY: "clockhub-theme",
+  init() {
+    const saved = localStorage.getItem(this.KEY) || "dark";
+    document.documentElement.setAttribute("data-theme", saved);
+    this.updateBtn();
+  },
+  toggle() {
+    const cur = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", cur);
+    localStorage.setItem(this.KEY, cur);
+    this.updateBtn();
+  },
+  updateBtn() {
+    const btn = document.getElementById("themeBtn");
+    if (btn) {
+      /* light mode → offer NIGHT MODE (moon); dark mode → offer DAY MODE (sun) */
+      btn.innerHTML =
+        document.documentElement.getAttribute("data-theme") === "light" ? TT_MOON : TT_SUN;
+      btn.title = "Toggle night mode";
+    }
+  }
+};
+
+/* ---------- Fullscreen ---------- */
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(function () {});
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+/* ---------- Sound engine (no audio files needed) ---------- */
+const Sound = {
+  ctx: null,
+  timer: null,
+  playing: false,
+
+  ensureCtx() {
+    if (!this.ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AC();
+    }
+    if (this.ctx.state === "suspended") this.ctx.resume();
+  },
+
+  beep(freq, duration, type, when) {
+    const ctx = this.ctx;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || "sine";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, when);
+    gain.gain.exponentialRampToValueAtTime(0.35, when + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, when + duration);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(when);
+    osc.stop(when + duration + 0.05);
+  },
+
+  /* patterns: name -> function that schedules ~1 second of sound */
+  patterns: {
+    classic: function (S) {
+      const t = S.ctx.currentTime;
+      S.beep(880, 0.18, "square", t);
+      S.beep(880, 0.18, "square", t + 0.25);
+      S.beep(880, 0.18, "square", t + 0.5);
+    },
+    digital: function (S) {
+      const t = S.ctx.currentTime;
+      S.beep(1318, 0.1, "square", t);
+      S.beep(1318, 0.1, "square", t + 0.15);
+      S.beep(1760, 0.15, "square", t + 0.3);
+    },
+    gentle: function (S) {
+      const t = S.ctx.currentTime;
+      S.beep(523, 0.4, "sine", t);
+      S.beep(659, 0.4, "sine", t + 0.3);
+      S.beep(784, 0.5, "sine", t + 0.6);
+    }
+  },
+
+  start(name) {
+    this.stop();
+    this.ensureCtx();
+    const patt = this.patterns[name] || this.patterns.classic;
+    const self = this;
+    patt(self);
+    this.timer = setInterval(function () { patt(self); }, 1200);
+    this.playing = true;
+  },
+
+  stop() {
+    if (this.timer) clearInterval(this.timer);
+    this.timer = null;
+    this.playing = false;
+  }
+};
+
+/* ---------- Browser notification ---------- */
+function notify(title, body) {
+  if (!("Notification" in window)) return;
+  if (Notification.permission === "granted") {
+    new Notification(title, { body: body });
+  }
+}
+
+function requestNotifyPermission() {
+  if ("Notification" in window && Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+}
+
+/* ---------- Tab title flash ---------- */
+const TitleFlash = {
+  timer: null,
+  original: document.title,
+  start(msg) {
+    this.stop();
+    this.original = document.title;
+    let on = false;
+    this.timer = setInterval(function () {
+      document.title = on ? msg : "⏰ " + msg;
+      on = !on;
+    }, 800);
+  },
+  stop() {
+    if (this.timer) clearInterval(this.timer);
+    this.timer = null;
+    document.title = this.original;
+  }
+};
+
+/* ---------- Boot ---------- */
+document.addEventListener("DOMContentLoaded", function () {
+  Theme.init();
+  const themeBtn = document.getElementById("themeBtn");
+  if (themeBtn) themeBtn.addEventListener("click", function () { Theme.toggle(); });
+  const fsBtn = document.getElementById("fsBtn");
+  if (fsBtn) fsBtn.addEventListener("click", toggleFullscreen);
+});
+
+/* ===== tzdata.js ===== */
+/* ClockHub - country -> IANA time zones (generated from tz database) */
+const COUNTRY_TZ = {"Afghanistan":["Asia/Kabul"],"Albania":["Europe/Tirane"],"Algeria":["Africa/Algiers"],"Andorra":["Europe/Andorra"],"Angola":["Africa/Luanda"],"Anguilla":["America/Anguilla"],"Antarctica":["Antarctica/McMurdo","Antarctica/Casey","Antarctica/Davis","Antarctica/DumontDUrville","Antarctica/Mawson","Antarctica/Palmer","Antarctica/Rothera","Antarctica/Syowa","Antarctica/Troll","Antarctica/Vostok"],"Antigua & Barbuda":["America/Antigua"],"Argentina":["America/Argentina/Buenos_Aires","America/Argentina/Cordoba","America/Argentina/Salta","America/Argentina/Jujuy","America/Argentina/Tucuman","America/Argentina/Catamarca","America/Argentina/La_Rioja","America/Argentina/San_Juan","America/Argentina/Mendoza","America/Argentina/San_Luis","America/Argentina/Rio_Gallegos","America/Argentina/Ushuaia"],"Armenia":["Asia/Yerevan"],"Aruba":["America/Aruba"],"Australia":["Australia/Lord_Howe","Antarctica/Macquarie","Australia/Hobart","Australia/Melbourne","Australia/Sydney","Australia/Broken_Hill","Australia/Brisbane","Australia/Lindeman","Australia/Adelaide","Australia/Darwin","Australia/Perth","Australia/Eucla"],"Austria":["Europe/Vienna"],"Azerbaijan":["Asia/Baku"],"Bahamas":["America/Nassau"],"Bahrain":["Asia/Bahrain"],"Bangladesh":["Asia/Dhaka"],"Barbados":["America/Barbados"],"Belarus":["Europe/Minsk"],"Belgium":["Europe/Brussels"],"Belize":["America/Belize"],"Benin":["Africa/Porto-Novo"],"Bermuda":["Atlantic/Bermuda"],"Bhutan":["Asia/Thimphu"],"Bolivia":["America/La_Paz"],"Bosnia & Herzegovina":["Europe/Sarajevo"],"Botswana":["Africa/Gaborone"],"Brazil":["America/Noronha","America/Belem","America/Fortaleza","America/Recife","America/Araguaina","America/Maceio","America/Bahia","America/Sao_Paulo","America/Campo_Grande","America/Cuiaba","America/Santarem","America/Porto_Velho","America/Boa_Vista","America/Manaus","America/Eirunepe","America/Rio_Branco"],"Britain (UK)":["Europe/London"],"British Indian Ocean Territory":["Indian/Chagos"],"Brunei":["Asia/Brunei"],"Bulgaria":["Europe/Sofia"],"Burkina Faso":["Africa/Ouagadougou"],"Burundi":["Africa/Bujumbura"],"Cambodia":["Asia/Phnom_Penh"],"Cameroon":["Africa/Douala"],"Canada":["America/St_Johns","America/Halifax","America/Glace_Bay","America/Moncton","America/Goose_Bay","America/Blanc-Sablon","America/Toronto","America/Iqaluit","America/Atikokan","America/Winnipeg","America/Resolute","America/Rankin_Inlet","America/Regina","America/Swift_Current","America/Edmonton","America/Cambridge_Bay","America/Inuvik","America/Vancouver","America/Creston","America/Dawson_Creek","America/Fort_Nelson","America/Whitehorse","America/Dawson"],"Cape Verde":["Atlantic/Cape_Verde"],"Caribbean NL":["America/Kralendijk"],"Cayman Islands":["America/Cayman"],"Central African Rep.":["Africa/Bangui"],"Chad":["Africa/Ndjamena"],"Chile":["America/Santiago","America/Coyhaique","America/Punta_Arenas","Pacific/Easter"],"China":["Asia/Shanghai","Asia/Urumqi"],"Christmas Island":["Indian/Christmas"],"Cocos (Keeling) Islands":["Indian/Cocos"],"Colombia":["America/Bogota"],"Comoros":["Indian/Comoro"],"Congo (Dem. Rep.)":["Africa/Kinshasa","Africa/Lubumbashi"],"Congo (Rep.)":["Africa/Brazzaville"],"Cook Islands":["Pacific/Rarotonga"],"Costa Rica":["America/Costa_Rica"],"Croatia":["Europe/Zagreb"],"Cuba":["America/Havana"],"Cura\u00e7ao":["America/Curacao"],"Cyprus":["Asia/Nicosia","Asia/Famagusta"],"Czech Republic":["Europe/Prague"],"C\u00f4te d\u2019Ivoire":["Africa/Abidjan"],"Denmark":["Europe/Copenhagen"],"Djibouti":["Africa/Djibouti"],"Dominica":["America/Dominica"],"Dominican Republic":["America/Santo_Domingo"],"East Timor":["Asia/Dili"],"Ecuador":["America/Guayaquil","Pacific/Galapagos"],"Egypt":["Africa/Cairo"],"El Salvador":["America/El_Salvador"],"Equatorial Guinea":["Africa/Malabo"],"Eritrea":["Africa/Asmara"],"Estonia":["Europe/Tallinn"],"Eswatini (Swaziland)":["Africa/Mbabane"],"Ethiopia":["Africa/Addis_Ababa"],"Falkland Islands":["Atlantic/Stanley"],"Faroe Islands":["Atlantic/Faroe"],"Fiji":["Pacific/Fiji"],"Finland":["Europe/Helsinki"],"France":["Europe/Paris"],"French Guiana":["America/Cayenne"],"French Polynesia":["Pacific/Tahiti","Pacific/Marquesas","Pacific/Gambier"],"French S. Terr.":["Indian/Kerguelen"],"Gabon":["Africa/Libreville"],"Gambia":["Africa/Banjul"],"Georgia":["Asia/Tbilisi"],"Germany":["Europe/Berlin","Europe/Busingen"],"Ghana":["Africa/Accra"],"Gibraltar":["Europe/Gibraltar"],"Greece":["Europe/Athens"],"Greenland":["America/Nuuk","America/Danmarkshavn","America/Scoresbysund","America/Thule"],"Grenada":["America/Grenada"],"Guadeloupe":["America/Guadeloupe"],"Guam":["Pacific/Guam"],"Guatemala":["America/Guatemala"],"Guernsey":["Europe/Guernsey"],"Guinea":["Africa/Conakry"],"Guinea-Bissau":["Africa/Bissau"],"Guyana":["America/Guyana"],"Haiti":["America/Port-au-Prince"],"Honduras":["America/Tegucigalpa"],"Hong Kong":["Asia/Hong_Kong"],"Hungary":["Europe/Budapest"],"Iceland":["Atlantic/Reykjavik"],"India":["Asia/Kolkata"],"Indonesia":["Asia/Jakarta","Asia/Pontianak","Asia/Makassar","Asia/Jayapura"],"Iran":["Asia/Tehran"],"Iraq":["Asia/Baghdad"],"Ireland":["Europe/Dublin"],"Isle of Man":["Europe/Isle_of_Man"],"Israel":["Asia/Jerusalem"],"Italy":["Europe/Rome"],"Jamaica":["America/Jamaica"],"Japan":["Asia/Tokyo"],"Jersey":["Europe/Jersey"],"Jordan":["Asia/Amman"],"Kazakhstan":["Asia/Almaty","Asia/Qyzylorda","Asia/Qostanay","Asia/Aqtobe","Asia/Aqtau","Asia/Atyrau","Asia/Oral"],"Kenya":["Africa/Nairobi"],"Kiribati":["Pacific/Tarawa","Pacific/Kanton","Pacific/Kiritimati"],"Korea (North)":["Asia/Pyongyang"],"Korea (South)":["Asia/Seoul"],"Kuwait":["Asia/Kuwait"],"Kyrgyzstan":["Asia/Bishkek"],"Laos":["Asia/Vientiane"],"Latvia":["Europe/Riga"],"Lebanon":["Asia/Beirut"],"Lesotho":["Africa/Maseru"],"Liberia":["Africa/Monrovia"],"Libya":["Africa/Tripoli"],"Liechtenstein":["Europe/Vaduz"],"Lithuania":["Europe/Vilnius"],"Luxembourg":["Europe/Luxembourg"],"Macau":["Asia/Macau"],"Madagascar":["Indian/Antananarivo"],"Malawi":["Africa/Blantyre"],"Malaysia":["Asia/Kuala_Lumpur","Asia/Kuching"],"Maldives":["Indian/Maldives"],"Mali":["Africa/Bamako"],"Malta":["Europe/Malta"],"Marshall Islands":["Pacific/Majuro","Pacific/Kwajalein"],"Martinique":["America/Martinique"],"Mauritania":["Africa/Nouakchott"],"Mauritius":["Indian/Mauritius"],"Mayotte":["Indian/Mayotte"],"Mexico":["America/Mexico_City","America/Cancun","America/Merida","America/Monterrey","America/Matamoros","America/Chihuahua","America/Ciudad_Juarez","America/Ojinaga","America/Mazatlan","America/Bahia_Banderas","America/Hermosillo","America/Tijuana"],"Micronesia":["Pacific/Chuuk","Pacific/Pohnpei","Pacific/Kosrae"],"Moldova":["Europe/Chisinau"],"Monaco":["Europe/Monaco"],"Mongolia":["Asia/Ulaanbaatar","Asia/Hovd"],"Montenegro":["Europe/Podgorica"],"Montserrat":["America/Montserrat"],"Morocco":["Africa/Casablanca"],"Mozambique":["Africa/Maputo"],"Myanmar (Burma)":["Asia/Yangon"],"Namibia":["Africa/Windhoek"],"Nauru":["Pacific/Nauru"],"Nepal":["Asia/Kathmandu"],"Netherlands":["Europe/Amsterdam"],"New Caledonia":["Pacific/Noumea"],"New Zealand":["Pacific/Auckland","Pacific/Chatham"],"Nicaragua":["America/Managua"],"Niger":["Africa/Niamey"],"Nigeria":["Africa/Lagos"],"Niue":["Pacific/Niue"],"Norfolk Island":["Pacific/Norfolk"],"North Macedonia":["Europe/Skopje"],"Northern Mariana Islands":["Pacific/Saipan"],"Norway":["Europe/Oslo"],"Oman":["Asia/Muscat"],"Pakistan":["Asia/Karachi"],"Palau":["Pacific/Palau"],"Palestine":["Asia/Gaza","Asia/Hebron"],"Panama":["America/Panama"],"Papua New Guinea":["Pacific/Port_Moresby","Pacific/Bougainville"],"Paraguay":["America/Asuncion"],"Peru":["America/Lima"],"Philippines":["Asia/Manila"],"Pitcairn":["Pacific/Pitcairn"],"Poland":["Europe/Warsaw"],"Portugal":["Europe/Lisbon","Atlantic/Madeira","Atlantic/Azores"],"Puerto Rico":["America/Puerto_Rico"],"Qatar":["Asia/Qatar"],"Romania":["Europe/Bucharest"],"Russia":["Europe/Kaliningrad","Europe/Moscow","Europe/Kirov","Europe/Volgograd","Europe/Astrakhan","Europe/Saratov","Europe/Ulyanovsk","Europe/Samara","Asia/Yekaterinburg","Asia/Omsk","Asia/Novosibirsk","Asia/Barnaul","Asia/Tomsk","Asia/Novokuznetsk","Asia/Krasnoyarsk","Asia/Irkutsk","Asia/Chita","Asia/Yakutsk","Asia/Khandyga","Asia/Vladivostok","Asia/Ust-Nera","Asia/Magadan","Asia/Sakhalin","Asia/Srednekolymsk","Asia/Kamchatka","Asia/Anadyr"],"Rwanda":["Africa/Kigali"],"R\u00e9union":["Indian/Reunion"],"Samoa (American)":["Pacific/Pago_Pago"],"Samoa (western)":["Pacific/Apia"],"San Marino":["Europe/San_Marino"],"Sao Tome & Principe":["Africa/Sao_Tome"],"Saudi Arabia":["Asia/Riyadh"],"Senegal":["Africa/Dakar"],"Serbia":["Europe/Belgrade"],"Seychelles":["Indian/Mahe"],"Sierra Leone":["Africa/Freetown"],"Singapore":["Asia/Singapore"],"Slovakia":["Europe/Bratislava"],"Slovenia":["Europe/Ljubljana"],"Solomon Islands":["Pacific/Guadalcanal"],"Somalia":["Africa/Mogadishu"],"South Africa":["Africa/Johannesburg"],"South Georgia & the South Sandwich Islands":["Atlantic/South_Georgia"],"South Sudan":["Africa/Juba"],"Spain":["Europe/Madrid","Africa/Ceuta","Atlantic/Canary"],"Sri Lanka":["Asia/Colombo"],"St Barthelemy":["America/St_Barthelemy"],"St Helena":["Atlantic/St_Helena"],"St Kitts & Nevis":["America/St_Kitts"],"St Lucia":["America/St_Lucia"],"St Maarten (Dutch)":["America/Lower_Princes"],"St Martin (French)":["America/Marigot"],"St Pierre & Miquelon":["America/Miquelon"],"St Vincent":["America/St_Vincent"],"Sudan":["Africa/Khartoum"],"Suriname":["America/Paramaribo"],"Svalbard & Jan Mayen":["Arctic/Longyearbyen"],"Sweden":["Europe/Stockholm"],"Switzerland":["Europe/Zurich"],"Syria":["Asia/Damascus"],"Taiwan":["Asia/Taipei"],"Tajikistan":["Asia/Dushanbe"],"Tanzania":["Africa/Dar_es_Salaam"],"Thailand":["Asia/Bangkok"],"Togo":["Africa/Lome"],"Tokelau":["Pacific/Fakaofo"],"Tonga":["Pacific/Tongatapu"],"Trinidad & Tobago":["America/Port_of_Spain"],"Tunisia":["Africa/Tunis"],"Turkey":["Europe/Istanbul"],"Turkmenistan":["Asia/Ashgabat"],"Turks & Caicos Is":["America/Grand_Turk"],"Tuvalu":["Pacific/Funafuti"],"US minor outlying islands":["Pacific/Midway","Pacific/Wake"],"Uganda":["Africa/Kampala"],"Ukraine":["Europe/Simferopol","Europe/Kyiv"],"United Arab Emirates":["Asia/Dubai"],"United States":["America/New_York","America/Detroit","America/Kentucky/Louisville","America/Kentucky/Monticello","America/Indiana/Indianapolis","America/Indiana/Vincennes","America/Indiana/Winamac","America/Indiana/Marengo","America/Indiana/Petersburg","America/Indiana/Vevay","America/Chicago","America/Indiana/Tell_City","America/Indiana/Knox","America/Menominee","America/North_Dakota/Center","America/North_Dakota/New_Salem","America/North_Dakota/Beulah","America/Denver","America/Boise","America/Phoenix","America/Los_Angeles","America/Anchorage","America/Juneau","America/Sitka","America/Metlakatla","America/Yakutat","America/Nome","America/Adak","Pacific/Honolulu"],"Uruguay":["America/Montevideo"],"Uzbekistan":["Asia/Samarkand","Asia/Tashkent"],"Vanuatu":["Pacific/Efate"],"Vatican City":["Europe/Vatican"],"Venezuela":["America/Caracas"],"Vietnam":["Asia/Ho_Chi_Minh"],"Virgin Islands (UK)":["America/Tortola"],"Virgin Islands (US)":["America/St_Thomas"],"Wallis & Futuna":["Pacific/Wallis"],"Western Sahara":["Africa/El_Aaiun"],"Yemen":["Asia/Aden"],"Zambia":["Africa/Lusaka"],"Zimbabwe":["Africa/Harare"],"\u00c5land Islands":["Europe/Mariehamn"]};
+
+/* ===== clock.js ===== */
+/* ==========================================================
+   ClockHub - clock.js
+   Big local clock (auto-detected visitor time zone) +
+   world clock with default cities and user-added cities
+   (Add City dialog, saved in localStorage).
+   Requires: common.js, tzdata.js (COUNTRY_TZ)
+   ========================================================== */
+
+"use strict";
+
+(function () {
+  const $ = function (id) { return document.getElementById(id); };
+
+  /* US time zones first, then the cities US users most often check */
+  const DEFAULT_CITIES = [
+    { name: "New York",    tz: "America/New_York" },
+    { name: "Chicago",     tz: "America/Chicago" },
+    { name: "Denver",      tz: "America/Denver" },
+    { name: "Los Angeles", tz: "America/Los_Angeles" },
+    { name: "Honolulu",    tz: "Pacific/Honolulu" },
+    { name: "London",      tz: "Europe/London" },
+    { name: "Paris",       tz: "Europe/Paris" },
+    { name: "Dubai",       tz: "Asia/Dubai" },
+    { name: "New Delhi",   tz: "Asia/Kolkata" },
+    { name: "Colombo",     tz: "Asia/Colombo" },
+    { name: "Tokyo",       tz: "Asia/Tokyo" },
+    { name: "Sydney",      tz: "Australia/Sydney" }
+  ];
+
+  const CUSTOM_KEY = "clockhub-custom-cities";
+  const cards = [];
+
+  let citySeq = 0;
+  function nextCityId() { return "c" + (++citySeq) + "_" + cards.length; }
+
+  function loadCustom() {
+    try { return JSON.parse(localStorage.getItem(CUSTOM_KEY)) || []; } catch (e) { return []; }
+  }
+  function saveCustom(list) {
+    try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function addCard(c, removable) {
+    let timeFmt, dateFmt;
+    try {
+      timeFmt = new Intl.DateTimeFormat("en-US", {
+        hour: "2-digit", minute: "2-digit", second: "2-digit",
+        hour12: true, timeZone: c.tz
+      });
+      dateFmt = new Intl.DateTimeFormat("en-US", {
+        weekday: "short", month: "short", day: "numeric", timeZone: c.tz
+      });
+    } catch (e) { return; } /* invalid time zone → skip */
+
+    const card = document.createElement("div");
+    card.className = "world-card";
+    card.innerHTML = '<div class="city"></div><div class="tz-time">--:--</div><div class="tz-date"></div>';
+    card.querySelector(".city").textContent = c.name;
+
+    const entry = {
+      tz: c.tz, name: c.name,
+      timeEl: card.querySelector(".tz-time"),
+      dateEl: card.querySelector(".tz-date"),
+      timeFmt: timeFmt, dateFmt: dateFmt
+    };
+
+    if (removable) {
+      const x = document.createElement("button");
+      x.className = "card-remove"; x.innerHTML = "×"; x.title = "Remove";
+      x.addEventListener("click", function () {
+        saveCustom(loadCustom().filter(function (i) { return i.id !== c.id; }));
+        const idx = cards.indexOf(entry);
+        if (idx > -1) cards.splice(idx, 1);
+        card.remove();
+      });
+      card.appendChild(x);
+    }
+
+    $("worldGrid").appendChild(card);
+    cards.push(entry);
+    return entry;
+  }
+
+  /* ---------- Main clock: visitor's own time zone ---------- */
+  function tick() {
+    const now = new Date();
+    const f = format12h(now);
+    $("bigTime").innerHTML = f.text + '<span class="ampm">' + f.ampm + "</span>";
+    $("bigDate").textContent = now.toLocaleDateString(undefined, {
+      weekday: "long", year: "numeric", month: "long", day: "numeric"
+    });
+    /* Note: the document title is deliberately NOT overwritten here.
+       Search engines render JavaScript, so replacing the title with a live
+       clock would make the indexed title a meaningless timestamp. */
+
+    cards.forEach(function (c) {
+      c.timeEl.textContent = c.timeFmt.format(now);
+      c.dateEl.textContent = c.dateFmt.format(now);
+    });
+  }
+
+  /* ---------- Add City dialog ---------- */
+  function cityFromTz(tz) { return tz.split("/").pop().replace(/_/g, " "); }
+
+  function offsetLabel(tz) {
+    try {
+      const now = new Date();
+      const loc = new Date(now.toLocaleString("en-US", { timeZone: tz }));
+      const utc = new Date(now.toLocaleString("en-US", { timeZone: "UTC" }));
+      let mins = Math.round((loc - utc) / 60000);
+      const sign = mins < 0 ? "-" : "+";
+      mins = Math.abs(mins);
+      return "(UTC " + sign + pad(Math.floor(mins / 60)) + ":" + pad(mins % 60) + ")";
+    } catch (e) { return "(UTC)"; }
+  }
+
+  function initModal() {
+    const countrySel = $("countrySel"), tzSel = $("tzSel"), cityTitle = $("cityTitle");
+
+    Object.keys(COUNTRY_TZ).sort().forEach(function (name) {
+      countrySel.add(new Option(name, name));
+    });
+    if (COUNTRY_TZ["United States"]) countrySel.value = "United States";
+
+    function fillTimezones() {
+      tzSel.innerHTML = "";
+      (COUNTRY_TZ[countrySel.value] || []).forEach(function (tz) {
+        tzSel.add(new Option(offsetLabel(tz) + " " + cityFromTz(tz), tz));
+      });
+      fillTitle();
+    }
+    function fillTitle() {
+      cityTitle.value = tzSel.value ? cityFromTz(tzSel.value) : "";
+    }
+
+    countrySel.addEventListener("change", fillTimezones);
+    tzSel.addEventListener("change", fillTitle);
+
+    function openModal() {
+      if (!countrySel.value) countrySel.value = "United States";
+      fillTimezones();
+      if (countrySel.value === "United States") {
+        for (let i = 0; i < tzSel.options.length; i++) {
+          if (tzSel.options[i].value === "America/New_York") { tzSel.selectedIndex = i; break; }
+        }
+        fillTitle();
+      }
+      $("cityModal").classList.add("show");
+    }
+    function closeModal() { $("cityModal").classList.remove("show"); }
+
+    $("addCityBtn").addEventListener("click", openModal);
+    $("cityModalClose").addEventListener("click", closeModal);
+    $("cityCancel").addEventListener("click", closeModal);
+    $("cityModal").addEventListener("click", function (e) {
+      if (e.target === $("cityModal")) closeModal();
+    });
+
+    $("cityOk").addEventListener("click", function () {
+      const tz = tzSel.value;
+      if (!tz) return;
+      const name = cityTitle.value.trim() || cityFromTz(tz);
+      /* unique id so removing one of two identical cities removes only that one */
+      const entry = { name: name, tz: tz, id: nextCityId() };
+      if (addCard(entry, true)) {
+        const list = loadCustom();
+        list.push(entry);
+        saveCustom(list);
+        tick();
+      }
+      closeModal();
+    });
+  }
+
+  /* ---------- Init ---------- */
+  document.addEventListener("DOMContentLoaded", function () {
+    try {
+      $("tzName").textContent = "Your time zone: " +
+        Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch (e) { /* older browsers */ }
+    DEFAULT_CITIES.forEach(function (c) { addCard(c, false); });
+    loadCustom().forEach(function (c) {
+      if (!c.id) c.id = nextCityId();   /* migrate entries saved before ids existed */
+      addCard(c, true);
+    });
+    initModal();
+    tick();
+    setInterval(tick, 1000);
+  });
+})();
+
+  </script>
+</body>
+</html>
